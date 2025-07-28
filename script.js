@@ -7,9 +7,9 @@ class Boid {
     }
 }
 
-const canvas = document.getElementById("boidbox");
-const ctx = canvas.getContext("2d");
-const boids = [];
+const boids = [
+    new Boid(10,10)
+];
 
 function update_boids() {
     canvas = document.getElementById("boidbox");
