@@ -15,7 +15,7 @@ function update_boids() {
     canvas = document.getElementById("boidbox");
     ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, 1200, 600);
-    for (let b in boids) {
+    for (let b of boids) {
         // physics here
 
         ctx.fillRect(b.x, b.y, 20, 20);
