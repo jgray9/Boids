@@ -1,5 +1,5 @@
 class Boid {
-    Boid(x,y) {
+    constructor(x,y) {
         this.x = x;
         this.y = y;
         this.vx = 0;
