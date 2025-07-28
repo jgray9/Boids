@@ -11,6 +11,10 @@ const boids = [
     new Boid(10,10)
 ];
 
+document.addEventListener("DOMContentLoaded", function (ev) {
+    setInterval(update_boids, 1000);
+});
+
 function update_boids() {
     canvas = document.getElementById("boidbox");
     ctx = canvas.getContext("2d");
