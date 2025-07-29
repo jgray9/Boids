@@ -14,7 +14,8 @@ class Boid {
 }
 
 const boids = [
-    new Boid(10,10)
+    new Boid(10,10),
+    new Boid(15,13)
 ];
 const dt = 0.01; // timestep in seconds
 
