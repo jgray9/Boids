@@ -18,6 +18,7 @@ const boids = [
     new Boid(15,13)
 ];
 const dt = 0.01; // timestep in seconds
+const BSIZE = 5;
 
 document.addEventListener("DOMContentLoaded", function (ev) {
     setInterval(update_boids, dt * 1000);
@@ -37,12 +38,12 @@ function update_boids() {
     }
 
     for (let b of boids) {
-        if(b.x + b.vx * dt < 0 || b.x + b.vx * dt > canvas.width - 5)
+        if(b.x + b.vx * dt < 0 || b.x + b.vx * dt > canvas.width - BSIZE)
             b.vx *= -1;
-        if(b.y + b.vy * dt < 0 || b.y + b.vy * dt > canvas.height - 5)
+        if(b.y + b.vy * dt < 0 || b.y + b.vy * dt > canvas.height - BSIZE)
             b.vy *= -1;
         b.x += b.vx * dt;
         b.y += b.vy * dt;
-        ctx.fillRect(b.x, b.y, 5, 5);
+        ctx.fillRect(b.x, b.y, BSIZE, BSIZE);
     }
 }
