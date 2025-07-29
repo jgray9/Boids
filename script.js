@@ -19,6 +19,7 @@ const boids = [
 ];
 const dt = 0.01; // timestep in seconds
 const BSIZE = 5;
+const NEIGHBOR_RADIUS = 50;
 
 document.addEventListener("DOMContentLoaded", function (ev) {
     setInterval(update_boids, dt * 1000);
@@ -31,7 +32,7 @@ function update_boids() {
     for (let b of boids) {
         for (let n of boids) {
             if(b == n) continue;
-            if(b.distance(n) > 10) continue;
+            if(b.distance(n) > NEIGHBOR_RADIUS) continue;
             b.vx += (b.x - n.x) * dt;
             b.vy += (b.y - n.y) * dt;
         }
