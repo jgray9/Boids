@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function (ev) {
 function update_boids() {
     canvas = document.getElementById("boidbox");
     ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, 1200, 600);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let b of boids) {
         for (let n of boids) {
             if(b == n) continue;
