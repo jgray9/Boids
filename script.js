@@ -11,6 +11,13 @@ class Boid {
         let dy = this.y - b.y;
         return Math.sqrt(dx*dx+dy*dy);
     }
+
+    add(b) {
+        this.x += b.x;
+        this.y += b.y;
+        this.vx += b.vx;
+        this.vy += b.vy;
+    }
 }
 
 const boids = [
@@ -29,13 +36,28 @@ function update_boids() {
     canvas = document.getElementById("boidbox");
     ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     for (let b of boids) {
+        // not an actual boid
+        // used to store sum of position and velocity of neighbors
+        let sumb = new Boid(0,0);
+
+        let num_neighbors = 0;
         for (let n of boids) {
             if(b == n) continue;
             if(b.distance(n) > NEIGHBOR_RADIUS) continue;
-            b.vx += (b.x - n.x) * dt;
-            b.vy += (b.y - n.y) * dt;
+            sumb.add(n);
+            num_neighbors += 1;
         }
+
+        // Collision Avoidance  Σ(b.position - n.position) = |N|*b.position - Σ(n.position)
+        // Velocity Matching    μ(n.velocity) - b.velocity = Σ(n.velocity) / |N| - b.velocity
+        // Flock Centering      μ(n.position) - b.position = Σ(n.position) / |N| - b.position
+        let fx = num_neighbors * b.x - sumb.x;
+        let fy = num_neighbors * b.y - sumb.y;
+
+        b.vx += fx * dt;
+        b.vy += fy * dt;
     }
 
     for (let b of boids) {
