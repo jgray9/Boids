@@ -16,9 +16,10 @@ class Boid {
 const boids = [
     new Boid(10,10)
 ];
+const dt = 0.01; // timestep in seconds
 
 document.addEventListener("DOMContentLoaded", function (ev) {
-    setInterval(update_boids, 1000);
+    setInterval(update_boids, dt * 1000);
 });
 
 function update_boids() {
@@ -29,18 +30,18 @@ function update_boids() {
         for (let n of boids) {
             if(b == n) continue;
             if(b.distance(n) > 10) continue;
-            b.vx += b.x - n.x;
-            b.vy += b.y - n.y;
+            b.vx += (b.x - n.x) * dt;
+            b.vy += (b.y - n.y) * dt;
         }
     }
 
     for (let b of boids) {
-        if(b.x + b.vx < 0 || b.x + b.vx > canvas.width - 5)
+        if(b.x + b.vx * dt < 0 || b.x + b.vx * dt > canvas.width - 5)
             b.vx *= -1;
-        if(b.y + b.vy < 0 || b.y + b.vy > canvas.height - 5)
+        if(b.y + b.vy * dt < 0 || b.y + b.vy * dt > canvas.height - 5)
             b.vy *= -1;
-        b.x += b.vx;
-        b.y += b.vy;
+        b.x += b.vx * dt;
+        b.y += b.vy * dt;
         ctx.fillRect(b.x, b.y, 20, 20);
     }
 }
