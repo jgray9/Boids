@@ -42,6 +42,6 @@ function update_boids() {
             b.vy *= -1;
         b.x += b.vx * dt;
         b.y += b.vy * dt;
-        ctx.fillRect(b.x, b.y, 20, 20);
+        ctx.fillRect(b.x, b.y, 5, 5);
     }
 }
