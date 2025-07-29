@@ -26,7 +26,6 @@ function update_boids() {
     ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, 1200, 600);
     for (let b of boids) {
-        console.log(b.x + "," + b.y + " " + b.vx + "," + b.vy);
         for (let n of boids) {
             if(b == n) continue;
             if(b.distance(n) > 10) continue;
@@ -36,6 +35,10 @@ function update_boids() {
     }
 
     for (let b of boids) {
+        if(b.x + b.vx < 0 || b.x + b.vx > canvas.width - 5)
+            b.vx *= -1;
+        if(b.y + b.vy < 0 || b.y + b.vy > canvas.height - 5)
+            b.vy *= -1;
         b.x += b.vx;
         b.y += b.vy;
         ctx.fillRect(b.x, b.y, 20, 20);
