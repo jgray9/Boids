@@ -34,6 +34,7 @@ function update_boids() {
     canvas = document.getElementById("boidbox");
     ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    document.getElementById("debug").innerHTML = "";
 
     for (let b of boids) {
         // not an actual boid
@@ -68,7 +69,7 @@ function update_boids() {
             let c_force_len = Math.sqrt( c_force.reduce((acc, val) => acc + val ** 2), 0);
             c_force.forEach((_,i) => c_force[i] /= c_force_len);
         }
-        document.getElementById("debug").innerHTML = `${c_force}<br>${v_force}<br>`
+        document.getElementById("debug").innerHTML += `BOID:<br>${b.p}<br>${b.v}<br>${c_force}<br>${v_force}<br>`;
 
         b.v.forEach((_,i) => b.v[i] += (c_force[i] + v_force[i]) * dt);
     }
