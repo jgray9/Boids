@@ -68,13 +68,22 @@ function update_boids() {
         v_force = μ(n.velocity) - b.velocity = Σ(n.velocity) / |N| - b.velocity
         f_force = μ(n.position) - b.position = Σ(n.position) / |N| - b.position
         */
-        let c_force = b.p.map((_,i) => num_neighbors * b.p[i] - sumb.p[i]);
-        let v_force = b.p.map((_,i) => sumb.v[i] / num_neighbors - b.v[i]);
+        let c_force = [0,0];
+        let v_force = [0,0];
+        let f_force = [0,0];
+
+        for(let i = 0; i < 2; i++) {
+            c_force[i] = num_neighbors * b.p[i] - sumb.p[i];
+            v_force[i] = sumb.v[i] / num_neighbors - b.v[i];
+            f_force[i] = sumb.p[i] / num_neighbors - b.p[i];
+        }
 
         // forces based off of position must be normalized
         c_force = normalize(c_force);
-        document.getElementById("debug").innerHTML += `BOID:<br>${b.p}<br>${b.v}<br>${c_force}<br>${v_force}<br>`;
-        b.v.forEach((_,i) => b.v[i] += (c_force[i] + v_force[i]) * dt);
+        f_force = normalize(f_force);
+        document.getElementById("debug").innerHTML += `BOID:<br>${b.v}<br>${c_force}<br>${v_force}<br>${f_force}<br>`;
+
+        b.v.forEach((_,i) => b.v[i] += (c_force[i] + v_force[i] + f_force[i]) * dt);
     }
 
     for (let b of boids) {
