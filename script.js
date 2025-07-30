@@ -50,11 +50,17 @@ function update_boids() {
             num_neighbors += 1;
         }
 
+        if(num_neighbors == 0)
+            continue;
+
         // Collision Avoidance  Σ(b.position - n.position) = |N|*b.position - Σ(n.position)
         // Velocity Matching    μ(n.velocity) - b.velocity = Σ(n.velocity) / |N| - b.velocity
         // Flock Centering      μ(n.position) - b.position = Σ(n.position) / |N| - b.position
         let fx = num_neighbors * b.x - sumb.x;
+        fx += sumb.vx / num_neighbors - b.vx;
         let fy = num_neighbors * b.y - sumb.y;
+        fy += sumb.vy / num_neighbors - b.vy;
+
 
         b.vx += fx * dt;
         b.vy += fy * dt;
