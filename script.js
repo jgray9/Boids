@@ -62,7 +62,13 @@ function update_boids() {
         */
         let c_force = b.p.map((_,i) => num_neighbors * b.p[i] - sumb.p[i]);
         let v_force = b.p.map((_,i) => sumb.v[i] / num_neighbors - b.v[i]);
-        document.getElementById("debug").innerHTML = `${c_force}<br>${v_force}<br>${f_force}`
+
+        // forces based off of position must be normalized
+        {
+            let c_force_len = Math.sqrt( c_force.reduce((acc, val) => acc + val ** 2), 0);
+            c_force.forEach((_,i) => c_force[i] /= c_force_len);
+        }
+        document.getElementById("debug").innerHTML = `${c_force}<br>${v_force}<br>`
 
         b.v.forEach((_,i) => b.v[i] += (c_force[i] + v_force[i]) * dt);
     }
