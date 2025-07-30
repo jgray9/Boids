@@ -51,12 +51,18 @@ function update_boids() {
         if(num_neighbors == 0)
             continue;
 
-        // Collision Avoidance  Σ(b.position - n.position) = |N|*b.position - Σ(n.position)
-        // Velocity Matching    μ(n.velocity) - b.velocity = Σ(n.velocity) / |N| - b.velocity
-        // Flock Centering      μ(n.position) - b.position = Σ(n.position) / |N| - b.position
+        /*
+        Collision Avoidance Force   sum of vectors from b's neighbors to b
+        Velocity Matching Force     vector from b's velocity to average velocity of neighbors
+        Flock Centering Force       vector from b to average position of neighbors
+
+        c_force = Σ(b.position - n.position) = |N|*b.position - Σ(n.position)
+        v_force = μ(n.velocity) - b.velocity = Σ(n.velocity) / |N| - b.velocity
+        f_force = μ(n.position) - b.position = Σ(n.position) / |N| - b.position
+        */
         let c_force = b.p.map((_,i) => num_neighbors * b.p[i] - sumb.p[i]);
         let v_force = b.p.map((_,i) => sumb.v[i] / num_neighbors - b.v[i]);
-
+        document.getElementById("debug").innerHTML = `${c_force}<br>${v_force}<br>${f_force}`
 
         b.v.forEach((_,i) => b.v[i] += (c_force[i] + v_force[i]) * dt);
     }
