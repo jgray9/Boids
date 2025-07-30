@@ -1,23 +1,21 @@
 class Boid {
     constructor(x,y) {
-        this.x = x;
-        this.y = y;
-        this.vx = 0;
-        this.vy = 0;
+        this.p = [x,y];
+        this.v = [0,0];
     }
 
     distance(b) {
-        let dx = this.x - b.x;
-        let dy = this.y - b.y;
+        let dx = this.p[0] - b.p[0];
+        let dy = this.p[1] - b.p[1];
         return Math.sqrt(dx*dx+dy*dy);
     }
 
     add(b) {
-        this.x += b.x;
-        this.y += b.y;
-        this.vx += b.vx;
-        this.vy += b.vy;
-    }
+        this.p[0] += b.p[0];
+        this.p[1] += b.p[1];
+        this.v[0] += b.v[0];
+        this.v[1] += b.v[1];
+    } 
 }
 
 const boids = [
@@ -56,23 +54,23 @@ function update_boids() {
         // Collision Avoidance  Σ(b.position - n.position) = |N|*b.position - Σ(n.position)
         // Velocity Matching    μ(n.velocity) - b.velocity = Σ(n.velocity) / |N| - b.velocity
         // Flock Centering      μ(n.position) - b.position = Σ(n.position) / |N| - b.position
-        let fx = num_neighbors * b.x - sumb.x;
-        fx += sumb.vx / num_neighbors - b.vx;
-        let fy = num_neighbors * b.y - sumb.y;
-        fy += sumb.vy / num_neighbors - b.vy;
+        let fx = num_neighbors * b.p[0] - sumb.p[0];
+        fx += sumb.v[0] / num_neighbors - b.v[0];
+        let fy = num_neighbors * b.p[1] - sumb.p[1];
+        fy += sumb.v[1] / num_neighbors - b.v[1];
 
 
-        b.vx += fx * dt;
-        b.vy += fy * dt;
+        b.v[0] += fx * dt;
+        b.v[1] += fy * dt;
     }
 
     for (let b of boids) {
-        if(b.x + b.vx * dt < 0 || b.x + b.vx * dt > canvas.width - BSIZE)
-            b.vx *= -1;
-        if(b.y + b.vy * dt < 0 || b.y + b.vy * dt > canvas.height - BSIZE)
-            b.vy *= -1;
-        b.x += b.vx * dt;
-        b.y += b.vy * dt;
-        ctx.fillRect(b.x, b.y, BSIZE, BSIZE);
+        if(b.p[0] + b.v[0] * dt < 0 || b.p[0] + b.v[0] * dt > canvas.width - BSIZE)
+            b.v[0] *= -1;
+        if(b.p[1] + b.v[1] * dt < 0 || b.p[1] + b.v[1] * dt > canvas.height - BSIZE)
+            b.v[1] *= -1;
+        b.p[0] += b.v[0] * dt;
+        b.p[1] += b.v[1] * dt;
+        ctx.fillRect(b.p[0], b.p[1], BSIZE, BSIZE);
     }
 }
