@@ -62,12 +62,15 @@ function update_boids() {
     }
 
     for (let b of boids) {
-        if(b.p[0] + b.v[0] * dt < 0 || b.p[0] + b.v[0] * dt > canvas.width - BSIZE)
+        // prevent out of bounds
+        let futurepos = b.p.map((_,i) => b.p[i] + b.v[i] * dt);
+        if(futurepos[0] < 0 || futurepos[0] > canvas.width - BSIZE)
             b.v[0] *= -1;
-        if(b.p[1] + b.v[1] * dt < 0 || b.p[1] + b.v[1] * dt > canvas.height - BSIZE)
+        if(futurepos[1] < 0 || futurepos[1] > canvas.height - BSIZE)
             b.v[1] *= -1;
-        b.p[0] += b.v[0] * dt;
-        b.p[1] += b.v[1] * dt;
+        // update position
+        b.p.forEach((_,i) => b.p[i] += b.v[i] * dt);
+
         ctx.fillRect(b.p[0], b.p[1], BSIZE, BSIZE);
     }
 }
