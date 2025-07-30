@@ -30,6 +30,13 @@ document.addEventListener("DOMContentLoaded", function (ev) {
     setInterval(update_boids, dt * 1000);
 });
 
+function normalize(array) {
+    let len = Math.sqrt( array.reduce((acc, val) => acc + val ** 2), 0);
+    if(len == 0)
+        return array.map(_ => 0);;
+    return array.map(val => val / len);
+}
+
 function update_boids() {
     canvas = document.getElementById("boidbox");
     ctx = canvas.getContext("2d");
@@ -65,12 +72,8 @@ function update_boids() {
         let v_force = b.p.map((_,i) => sumb.v[i] / num_neighbors - b.v[i]);
 
         // forces based off of position must be normalized
-        {
-            let c_force_len = Math.sqrt( c_force.reduce((acc, val) => acc + val ** 2), 0);
-            c_force.forEach((_,i) => c_force[i] /= c_force_len);
-        }
+        c_force = normalize(c_force);
         document.getElementById("debug").innerHTML += `BOID:<br>${b.p}<br>${b.v}<br>${c_force}<br>${v_force}<br>`;
-
         b.v.forEach((_,i) => b.v[i] += (c_force[i] + v_force[i]) * dt);
     }
 
