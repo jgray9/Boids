@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function (ev) {
 });
 
 function normalize(array) {
-    let len = Math.sqrt( array.reduce((acc, val) => acc + val ** 2), 0);
+    let len = Math.sqrt(array.reduce((acc, val) => acc + val ** 2, 0));
     if(len == 0)
         return array.map(_ => 0);;
     return array.map(val => val / len);
