@@ -26,6 +26,10 @@ const dt = 0.01; // timestep in seconds
 const BSIZE = 5;
 const NEIGHBOR_RADIUS = 50;
 
+const COLLISION = 1;
+const VELOCITY = 1;
+const CENTERING = 1;
+
 document.addEventListener("DOMContentLoaded", function (ev) {
     setInterval(update_boids, dt * 1000);
 });
@@ -70,9 +74,15 @@ function update_boids() {
             v_force[i] = sumb.v[i] / num_neighbors - b.v[i];
             f_force[i] = sumb.p[i] / num_neighbors - b.p[i];
         }
-        document.getElementById("debug").innerHTML += `BOID:<br>${b.v}<br>${c_force}<br>${v_force}<br>${f_force}<br>`;
+        document.getElementById("debug").innerHTML += `BOID:<br>Position: ${b.p}<br>Velocity: ${b.v}<br>Collision: ${c_force}<br>Matching: ${v_force}<br>Centering: ${f_force}<br>`;
 
-        b.v.forEach((_,i) => b.v[i] += (c_force[i] + v_force[i] + f_force[i]) * dt);
+        b.v.forEach((_,i) => {
+            b.v[i] += (
+                COLLISION * c_force[i] +
+                VELOCITY  * v_force[i] +
+                CENTERING * f_force[i]
+            ) * dt;
+        });
     }
 
     for (let b of boids) {
