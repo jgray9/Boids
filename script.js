@@ -18,10 +18,7 @@ class Boid {
     } 
 }
 
-const boids = [
-    new Boid(10,10),
-    new Boid(15,13)
-];
+const boids = [];
 const dt = 0.01; // timestep in seconds
 const BSIZE = 5;
 const NEIGHBOR_RADIUS = 50;
@@ -31,6 +28,14 @@ const VELOCITY = 1;
 const CENTERING = 1;
 
 document.addEventListener("DOMContentLoaded", function (ev) {
+    // randomize velocity of each void
+    for(let i = 0; i < 2; i++) {
+        let b = new Boid(0,0);
+        b.p[0] = Math.random() * document.getElementById("boidbox").width;
+        b.p[1] = Math.random() * document.getElementById("boidbox").height;
+        b.v = b.v.map(_ => (Math.random() * 40) - 20);
+        boids.push(b);
+    }
     setInterval(update_boids, dt * 1000);
 });
 
