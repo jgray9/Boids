@@ -27,6 +27,8 @@ const COLLISION = 1;
 const VELOCITY = 1;
 const CENTERING = 1;
 
+const MIN_SPEED = 20;
+
 document.addEventListener("DOMContentLoaded", function (ev) {
     // randomize velocity of each void
     for(let i = 0; i < 2; i++) {
@@ -97,6 +99,10 @@ function update_boids() {
             b.v[0] *= -1;
         if(futurepos[1] < 0 || futurepos[1] > canvas.height - BSIZE)
             b.v[1] *= -1;
+        // prevent boids moving too slow
+        let len = Math.sqrt(b.v.reduce((acc, val) => acc + val ** 2, 0)); // length of velocity vector
+        if(len < MIN_SPEED)
+            b.v = b.v.map(val => (val / len) * MIN_SPEED);
         // update position
         b.p.forEach((_,i) => b.p[i] += b.v[i] * dt);
 
