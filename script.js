@@ -4,12 +4,6 @@ class Boid {
         this.v = new Vector();
     }
 
-    distance(b) {
-        let dx = this.p[0] - b.p[0];
-        let dy = this.p[1] - b.p[1];
-        return Math.sqrt(dx*dx+dy*dy);
-    }
-
     add(b) {
         this.p.iadd(b.p);
         this.v.iadd(b.v);
@@ -115,7 +109,7 @@ function update_boids() {
         let num_neighbors = 0;
         for (let n of boids) {
             if(b == n) continue;
-            if(b.distance(n) > NEIGHBOR_RADIUS) continue;
+            if(b.p.distance(n.p) > NEIGHBOR_RADIUS) continue;
             sumb.add(n);
             num_neighbors += 1;
         }
