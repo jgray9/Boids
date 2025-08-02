@@ -114,9 +114,6 @@ function update_boids() {
             num_neighbors += 1;
         }
 
-        if(num_neighbors == 0)
-            continue;
-
         /*
         Collision Avoidance Force   sum of vectors from b's neighbors to b
         Velocity Matching Force     vector from b's velocity to average velocity of neighbors
@@ -140,7 +137,6 @@ function update_boids() {
         }
 
 
-        // document.getElementById("debug").innerHTML += `BOID:<br>Position: ${b.p}<br>Velocity: ${b.v}<br>Collision: ${c_force}<br>Matching: ${v_force}<br>Centering: ${f_force}<br>`;
         {
             let debugText = document.getElementById("debug");
             debugText.innerHTML += "BOID:<br>";
