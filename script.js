@@ -95,9 +95,9 @@ function update_boids() {
     for (let b of boids) {
         // prevent out of bounds
         let futurepos = b.p.map((_,i) => b.p[i] + b.v[i] * dt);
-        if(futurepos[0] < 0 || futurepos[0] > canvas.width - BSIZE)
+        if(futurepos[0] < 0 + BSIZE/2 || futurepos[0] > canvas.width - BSIZE/2)
             b.v[0] *= -1;
-        if(futurepos[1] < 0 || futurepos[1] > canvas.height - BSIZE)
+        if(futurepos[1] < 0 + BSIZE/2 || futurepos[1] > canvas.height - BSIZE/2)
             b.v[1] *= -1;
         // prevent boids moving too slow
         let len = Math.sqrt(b.v.reduce((acc, val) => acc + val ** 2, 0)); // length of velocity vector
@@ -106,6 +106,6 @@ function update_boids() {
         // update position
         b.p.forEach((_,i) => b.p[i] += b.v[i] * dt);
 
-        ctx.fillRect(b.p[0], b.p[1], BSIZE, BSIZE);
+        ctx.fillRect(b.p[0] - BSIZE/2, b.p[1] - BSIZE/2, BSIZE, BSIZE);
     }
 }
