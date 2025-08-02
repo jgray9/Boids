@@ -18,6 +18,59 @@ class Boid {
     } 
 }
 
+class Vector {
+    constructor(x=0,y=x) {
+        this.x = x;
+        this.y = y;
+    }
+
+    get length() {
+        return Math.sqrt(this.x ** 2 + this.y ** 2);
+    }
+
+    distance(otherVec) {
+        return this.sub(otherVec).length;
+    }
+
+    add(otherVec) {
+        return new Vector(
+            this.x + (otherVec.x ?? otherVec),
+            this.y + (otherVec.y ?? otherVec)
+        );
+    }
+
+    sub(otherVec) {
+        return new Vector(
+            this.x - (otherVec.x ?? otherVec),
+            this.y - (otherVec.y ?? otherVec)
+        );
+    }
+
+    mul(otherVec) {
+        return new Vector(
+            this.x * (otherVec.x ?? otherVec),
+            this.y * (otherVec.y ?? otherVec)
+        );
+    }
+
+    div(otherVec) {
+        return new Vector(
+            this.x / (otherVec.x ?? otherVec),
+            this.y / (otherVec.y ?? otherVec)
+        );
+    }
+
+    iadd(otherVec) {
+        this.x += otherVec.x ?? otherVec;
+        this.y += otherVec.y ?? otherVec;
+    }
+
+    imul(otherVec) {
+        this.x *= otherVec.x ?? otherVec;
+        this.y *= otherVec.y ?? otherVec;
+    }
+}
+
 const boids = [];
 const dt = 0.01; // timestep in seconds
 const BSIZE = 5;
