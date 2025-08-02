@@ -1,7 +1,7 @@
 class Boid {
     constructor(x,y) {
-        this.p = [x,y];
-        this.v = [0,0];
+        this.p = new Vector(x,y);
+        this.v = new Vector();
     }
 
     distance(b) {
@@ -11,10 +11,8 @@ class Boid {
     }
 
     add(b) {
-        this.p[0] += b.p[0];
-        this.p[1] += b.p[1];
-        this.v[0] += b.v[0];
-        this.v[1] += b.v[1];
+        this.p.iadd(b.p);
+        this.v.iadd(b.v);
     } 
 }
 
@@ -69,6 +67,11 @@ class Vector {
         this.x *= otherVec.x ?? otherVec;
         this.y *= otherVec.y ?? otherVec;
     }
+
+    idiv(otherVec) {
+        this.x /= otherVec.x ?? otherVec;
+        this.y /= otherVec.y ?? otherVec;
+    }
 }
 
 const boids = [];
@@ -84,11 +87,15 @@ const MIN_SPEED = 20;
 
 document.addEventListener("DOMContentLoaded", function (ev) {
     // randomize velocity of each void
+    let boidbox = document.getElementById("boidbox");
     for(let i = 0; i < 2; i++) {
         let b = new Boid(0,0);
-        b.p[0] = Math.random() * document.getElementById("boidbox").width;
-        b.p[1] = Math.random() * document.getElementById("boidbox").height;
-        b.v = b.v.map(_ => (Math.random() * 40) - 20);
+        b.p.x = Math.random() * boidbox.width;
+        b.p.y = Math.random() * boidbox.height;
+        b.v = new Vector(
+            (Math.random() * 40) - 20,
+            (Math.random() * 40) - 20
+        )
         boids.push(b);
     }
     setInterval(update_boids, dt * 1000);
@@ -128,37 +135,42 @@ function update_boids() {
         let c_force = [0,0];
         let v_force = [0,0];
         let f_force = [0,0];
+        if (num_neighbors > 0) {
+            c_force = b.p.sub(sumb.p).mul(num_neighbors);
+            v_force = sumb.v.div(num_neighbors).sub(b.v);
+            f_force = sumb.p.div(num_neighbors).sub(b.p);
 
-        for(let i = 0; i < 2; i++) {
-            c_force[i] = num_neighbors * b.p[i] - sumb.p[i];
-            v_force[i] = sumb.v[i] / num_neighbors - b.v[i];
-            f_force[i] = sumb.p[i] / num_neighbors - b.p[i];
+            b.v.iadd( c_force.mul(COLLISION).mul(dt) );
+            b.v.iadd( v_force.mul(VELOCITY).mul(dt) );
+            b.v.iadd( f_force.mul(CENTERING).mul(dt) );
         }
-        document.getElementById("debug").innerHTML += `BOID:<br>Position: ${b.p}<br>Velocity: ${b.v}<br>Collision: ${c_force}<br>Matching: ${v_force}<br>Centering: ${f_force}<br>`;
 
-        b.v.forEach((_,i) => {
-            b.v[i] += (
-                COLLISION * c_force[i] +
-                VELOCITY  * v_force[i] +
-                CENTERING * f_force[i]
-            ) * dt;
-        });
+
+        // document.getElementById("debug").innerHTML += `BOID:<br>Position: ${b.p}<br>Velocity: ${b.v}<br>Collision: ${c_force}<br>Matching: ${v_force}<br>Centering: ${f_force}<br>`;
+        {
+            let debugText = document.getElementById("debug");
+            debugText.innerHTML += "BOID:<br>";
+            debugText.innerHTML += `Position: ${Math.round(b.p.x)}, ${Math.round(b.p.y)}<br>`;
+            debugText.innerHTML += `Velocity: ${Math.round(b.v.x)}, ${Math.round(b.v.y)}<br>`;
+            debugText.innerHTML += `Collision: ${Math.round(c_force.x)}, ${Math.round(c_force.y)}<br>`;
+            debugText.innerHTML += `Velocity: ${Math.round(v_force.x)}, ${Math.round(v_force.y)}<br>`;
+            debugText.innerHTML += `Centering: ${Math.round(f_force.x)}, ${Math.round(f_force.y)}<br>`;
+        }
     }
 
     for (let b of boids) {
         // prevent out of bounds
-        let futurepos = b.p.map((_,i) => b.p[i] + b.v[i] * dt);
-        if(futurepos[0] < 0 + BSIZE/2 || futurepos[0] > canvas.width - BSIZE/2)
-            b.v[0] *= -1;
-        if(futurepos[1] < 0 + BSIZE/2 || futurepos[1] > canvas.height - BSIZE/2)
-            b.v[1] *= -1;
+        let futurepos = b.p.add(b.v.mul(dt));
+        if(futurepos.x < 0 + BSIZE/2 || futurepos.x > canvas.width - BSIZE/2)
+            b.v.x *= -1;
+        if(futurepos.y < 0 + BSIZE/2 || futurepos.y > canvas.height - BSIZE/2)
+            b.v.y *= -1;
         // prevent boids moving too slow
-        let len = Math.sqrt(b.v.reduce((acc, val) => acc + val ** 2, 0)); // length of velocity vector
-        if(len < MIN_SPEED)
-            b.v = b.v.map(val => (val / len) * MIN_SPEED);
+        if(b.v.length < MIN_SPEED)
+            b.v = b.v.div(b.v.length).mul(MIN_SPEED);
         // update position
-        b.p.forEach((_,i) => b.p[i] += b.v[i] * dt);
+        b.p.iadd(b.v.mul(dt));
 
-        ctx.fillRect(b.p[0] - BSIZE/2, b.p[1] - BSIZE/2, BSIZE, BSIZE);
+        ctx.fillRect(b.p.x - BSIZE/2, b.p.y - BSIZE/2, BSIZE, BSIZE);
     }
 }
