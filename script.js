@@ -127,8 +127,8 @@ function update_boids() {
             v_nb = b.p.sub(n.p);
             v_nb.length = NEIGHBOR_RADIUS - distance; // length of vector increases as boid gets closer
             c_force.iadd(v_nb);
-            v_force.iadd(n.p);
-            f_force.iadd(n.v);
+            v_force.iadd(n.v);
+            f_force.iadd(n.p);
 
             total_values.add(n);
             num_neighbors += 1;
