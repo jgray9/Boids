@@ -149,12 +149,14 @@ function update_boids() {
     }
 
     for (let b of boids) {
-        // prevent out of bounds
-        let futurepos = b.p.add(b.v.mul(dt));
-        if(futurepos.x < 0 + BSIZE/2 || futurepos.x > canvas.width - BSIZE/2)
-            b.v.x *= -1;
-        if(futurepos.y < 0 + BSIZE/2 || futurepos.y > canvas.height - BSIZE/2)
-            b.v.y *= -1;
+        if (b.p.x < BSIZE*2)
+            b.v.x += 1;
+        if (b.p.x > canvas.width - BSIZE*2)
+            b.v.x -= 1;
+        if (b.p.y < BSIZE*2)
+            b.v.y += 1;
+        if (b.p.y > canvas.height - BSIZE*2)
+            b.v.y -= 1;
         // prevent boids moving too slow
         if(b.v.length < MIN_SPEED)
             b.v = b.v.div(b.v.length).mul(MIN_SPEED);
