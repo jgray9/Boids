@@ -169,7 +169,7 @@ function update_boids() {
             debugText.innerHTML += `Position: ${Math.round(b.p.x)}, ${Math.round(b.p.y)}<br>`;
             debugText.innerHTML += `Velocity: ${Math.round(b.v.x)}, ${Math.round(b.v.y)}<br>`;
             debugText.innerHTML += `Collision: ${Math.round(c_force.x)}, ${Math.round(c_force.y)}<br>`;
-            debugText.innerHTML += `Velocity: ${Math.round(v_force.x)}, ${Math.round(v_force.y)}<br>`;
+            debugText.innerHTML += `Matching: ${Math.round(v_force.x)}, ${Math.round(v_force.y)}<br>`;
             debugText.innerHTML += `Centering: ${Math.round(f_force.x)}, ${Math.round(f_force.y)}<br>`;
             debugText.innerHTML += `Border: ${Math.round(b_force.x)}, ${Math.round(b_force.y)}<br>`;
         }
