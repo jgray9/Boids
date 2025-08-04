@@ -123,9 +123,9 @@ function update_boids() {
         v_force = μ(n.velocity) - b.velocity = Σ(n.velocity) / |N| - b.velocity
         f_force = μ(n.position) - b.position = Σ(n.position) / |N| - b.position
         */
-        let c_force = [0,0];
-        let v_force = [0,0];
-        let f_force = [0,0];
+        let c_force = new Vector();
+        let v_force = new Vector();
+        let f_force = new Vector();
         if (num_neighbors > 0) {
             c_force = b.p.sub(sumb.p).mul(num_neighbors);
             v_force = sumb.v.div(num_neighbors).sub(b.v);
