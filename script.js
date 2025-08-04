@@ -107,10 +107,17 @@ function update_boids() {
     document.getElementById("debug").innerHTML = "";
 
     for (let b of boids) {
+        // Collision Avoidance Force   sum of vectors from b's neighbors to b (scaled by distance)
+        // Velocity Matching Force     vector from b's velocity to average velocity of neighbors
+        // Flock Centering Force       vector from b to average position of neighbors
+        let c_force = new Vector();
+        let v_force = new Vector();
+        let f_force = new Vector();
+
         // not an actual boid
         // used to store sum of position and velocity of neighbors
-        let sumb = new Boid(0,0);
-        let c_force = new Vector();
+        let total_values = new Boid(0,0);
+
         let num_neighbors = 0;
         for (let n of boids) {
             if(b == n) continue;
@@ -118,34 +125,26 @@ function update_boids() {
             if(distance > NEIGHBOR_RADIUS) continue;
 
             v_nb = b.p.sub(n.p);
-            v_nb.length = NEIGHBOR_RADIUS - distance;
-            c_force.iadd( v_nb );
+            v_nb.length = NEIGHBOR_RADIUS - distance; // length of vector increases as boid gets closer
+            c_force.iadd(v_nb);
+            v_force.iadd(n.p);
+            f_force.iadd(n.v);
 
-            sumb.add(n);
+            total_values.add(n);
             num_neighbors += 1;
         }
 
-        /*
-        Collision Avoidance Force   sum of vectors from b's neighbors to b
-        Velocity Matching Force     vector from b's velocity to average velocity of neighbors
-        Flock Centering Force       vector from b to average position of neighbors
-
-        c_force = Σ(b.position - n.position) = |N|*b.position - Σ(n.position)
-        v_force = μ(n.velocity) - b.velocity = Σ(n.velocity) / |N| - b.velocity
-        f_force = μ(n.position) - b.position = Σ(n.position) / |N| - b.position
-        */
-        let c_force = new Vector();
-        let v_force = new Vector();
-        let f_force = new Vector();
+        // v_force = μ(n.velocity) - b.velocity = Σ(n.velocity) / |N| - b.velocity
+        // f_force = μ(n.position) - b.position = Σ(n.position) / |N| - b.position
         if (num_neighbors > 0) {
-            c_force = b.p.sub(sumb.p).mul(num_neighbors);
-            v_force = sumb.v.div(num_neighbors).sub(b.v);
-            f_force = sumb.p.div(num_neighbors).sub(b.p);
-
-            b.v.iadd( c_force.mul(COLLISION).mul(dt) );
-            b.v.iadd( v_force.mul(VELOCITY).mul(dt) );
-            b.v.iadd( f_force.mul(CENTERING).mul(dt) );
+            v_force = v_force.div(num_neighbors).sub(b.v);
+            f_force = f_force.div(num_neighbors).sub(b.p);
         }
+
+        // add forces to velocity
+        b.v.iadd( c_force.mul(COLLISION).mul(dt) );
+        b.v.iadd( v_force.mul(VELOCITY).mul(dt) );
+        b.v.iadd( f_force.mul(CENTERING).mul(dt) );
 
 
         {
