@@ -168,7 +168,7 @@ function update_boids() {
         if (b.p.y > canvas.height - BSIZE*2)
             b.v.y -= 1;
         // prevent boids moving too slow
-        if(b.v.length < MIN_SPEED)
+        if(b.v.length < MIN_SPEED && b.v.length > 0)
             b.v = b.v.div(b.v.length).mul(MIN_SPEED);
         // update position
         b.p.iadd(b.v.mul(dt));
