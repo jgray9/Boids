@@ -77,10 +77,12 @@ const boids = [];
 const dt = 0.01; // timestep in seconds
 const BSIZE = 5;
 const NEIGHBOR_RADIUS = 50;
+const STEERING_RADIUS = 20;
 
 const COLLISION = 1;
 const VELOCITY = 1;
 const CENTERING = 1;
+const BORDER = 1;
 
 const MIN_SPEED = 20;
 
@@ -113,6 +115,7 @@ function update_boids() {
         let c_force = new Vector();
         let v_force = new Vector();
         let f_force = new Vector();
+        let b_force = new Vector();
 
         // not an actual boid
         // used to store sum of position and velocity of neighbors
@@ -141,10 +144,23 @@ function update_boids() {
             f_force = f_force.div(num_neighbors).sub(b.p);
         }
 
+        // if distance(border, b.position.x) < STEERING RADIUS:
+        //     b_force = STEERING_RADIUS - distance
+        if (b.p.x < STEERING_RADIUS)
+            b_force.x = STEERING_RADIUS - b.p.x;
+        else if (canvas.width - b.p.x < STEERING_RADIUS)
+            b_force.x = -STEERING_RADIUS - (canvas.width - b.p.x);
+        if(b.p.y < STEERING_RADIUS)
+            b_force.y = STEERING_RADIUS - b.p.y;
+        else if (canvas.height - b.p.y < STEERING_RADIUS)
+            b_force.y = STEERING_RADIUS - (canvas.height - b.p.y);
+
+
         // add forces to velocity
         b.v.iadd( c_force.mul(COLLISION).mul(dt) );
         b.v.iadd( v_force.mul(VELOCITY).mul(dt) );
         b.v.iadd( f_force.mul(CENTERING).mul(dt) );
+        b.v.iadd( b_force.mul(BORDER).mul(dt) );
 
 
         {
@@ -155,6 +171,7 @@ function update_boids() {
             debugText.innerHTML += `Collision: ${Math.round(c_force.x)}, ${Math.round(c_force.y)}<br>`;
             debugText.innerHTML += `Velocity: ${Math.round(v_force.x)}, ${Math.round(v_force.y)}<br>`;
             debugText.innerHTML += `Centering: ${Math.round(f_force.x)}, ${Math.round(f_force.y)}<br>`;
+            debugText.innerHTML += `Border: ${Math.round(b_force.x)}, ${Math.round(b_force.y)}<br>`;
         }
     }
 
