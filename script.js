@@ -74,15 +74,15 @@ class Vector {
 }
 
 const boids = [];
-const dt = 0.01; // timestep in seconds
-const BSIZE = 5;
-const NEIGHBOR_RADIUS = 50;
+const dt = 0.05; // timestep in seconds
+const BSIZE = 2;
+const NEIGHBOR_RADIUS = 20;
 const STEERING_RADIUS = 20;
 
 const COLLISION = 1;
 const VELOCITY = 1;
 const CENTERING = 1;
-const BORDER = 1;
+const BORDER = 10;
 
 const MIN_SPEED = 20;
 
