@@ -82,26 +82,30 @@ const BORDER = 10;
 const MIN_SPEED = 20;
 
 document.addEventListener("DOMContentLoaded", function (ev) {
-    // randomize velocity of each void
-    let boidbox = document.getElementById("boidbox");
-    for(let i = 0; i < 2; i++) {
-        let b = new Boid(0,0);
-        b.p.x = Math.random() * boidbox.width;
-        b.p.y = Math.random() * boidbox.height;
-        b.v = new Vector(
-            (Math.random() * 40) - 20,
-            (Math.random() * 40) - 20
-        )
-        boids.push(b);
-    }
     setInterval(update_boids, dt * 1000);
 });
+
+document.addEventListener("mousedown", function (ev) {
+    canvas = document.getElementById("boidbox");
+
+    let x = ev.x/4;
+    let y = ev.y/4;
+
+    let b = new Boid(
+        Math.max(STEERING_RADIUS, Math.min(canvas.width - STEERING_RADIUS, x)),
+        Math.max(STEERING_RADIUS, Math.min(canvas.height- STEERING_RADIUS, y))
+    );
+    b.v = new Vector(
+        (Math.random() * 40) - 20,
+        (Math.random() * 40) - 20
+    );
+    boids.push(b);
+})
 
 function update_boids() {
     canvas = document.getElementById("boidbox");
     ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    document.getElementById("debug").innerHTML = "";
 
     for (let b of boids) {
         // Collision Avoidance Force   sum of vectors from b's neighbors to b (scaled by distance)
@@ -150,18 +154,6 @@ function update_boids() {
         b.v.iadd( v_force.mul(VELOCITY).mul(dt) );
         b.v.iadd( f_force.mul(CENTERING).mul(dt) );
         b.v.iadd( b_force.mul(BORDER).mul(dt) );
-
-
-        {
-            let debugText = document.getElementById("debug");
-            debugText.innerHTML += "BOID:<br>";
-            debugText.innerHTML += `Position: ${Math.round(b.p.x)}, ${Math.round(b.p.y)}<br>`;
-            debugText.innerHTML += `Velocity: ${Math.round(b.v.x)}, ${Math.round(b.v.y)}<br>`;
-            debugText.innerHTML += `Collision: ${Math.round(c_force.x)}, ${Math.round(c_force.y)}<br>`;
-            debugText.innerHTML += `Matching: ${Math.round(v_force.x)}, ${Math.round(v_force.y)}<br>`;
-            debugText.innerHTML += `Centering: ${Math.round(f_force.x)}, ${Math.round(f_force.y)}<br>`;
-            debugText.innerHTML += `Border: ${Math.round(b_force.x)}, ${Math.round(b_force.y)}<br>`;
-        }
     }
 
     for (let b of boids) {
