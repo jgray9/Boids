@@ -110,11 +110,17 @@ function update_boids() {
         // not an actual boid
         // used to store sum of position and velocity of neighbors
         let sumb = new Boid(0,0);
-
+        let c_force = new Vector();
         let num_neighbors = 0;
         for (let n of boids) {
             if(b == n) continue;
-            if(b.p.distance(n.p) > NEIGHBOR_RADIUS) continue;
+            let distance = b.p.distance(n.p);
+            if(distance > NEIGHBOR_RADIUS) continue;
+
+            v_nb = b.p.sub(n.p);
+            v_nb.length = NEIGHBOR_RADIUS - distance;
+            c_force.iadd( v_nb );
+
             sumb.add(n);
             num_neighbors += 1;
         }
