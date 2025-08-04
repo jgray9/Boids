@@ -20,6 +20,11 @@ class Vector {
         return Math.sqrt(this.x ** 2 + this.y ** 2);
     }
 
+    set length(i) {
+        this.idiv(this.length);
+        this.imul(i);
+    }
+
     distance(otherVec) {
         return this.sub(otherVec).length;
     }
