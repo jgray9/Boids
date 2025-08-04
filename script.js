@@ -176,14 +176,6 @@ function update_boids() {
     }
 
     for (let b of boids) {
-        if (b.p.x < BSIZE*2)
-            b.v.x += 1;
-        if (b.p.x > canvas.width - BSIZE*2)
-            b.v.x -= 1;
-        if (b.p.y < BSIZE*2)
-            b.v.y += 1;
-        if (b.p.y > canvas.height - BSIZE*2)
-            b.v.y -= 1;
         // prevent boids moving too slow
         if(b.v.length < MIN_SPEED && b.v.length > 0)
             b.v = b.v.div(b.v.length).mul(MIN_SPEED);
