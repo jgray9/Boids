@@ -149,12 +149,11 @@ function update_boids() {
         if (b.p.x < STEERING_RADIUS)
             b_force.x = STEERING_RADIUS - b.p.x;
         else if (canvas.width - b.p.x < STEERING_RADIUS)
-            b_force.x = -STEERING_RADIUS - (canvas.width - b.p.x);
+            b_force.x = (canvas.width - b.p.x) - STEERING_RADIUS;
         if(b.p.y < STEERING_RADIUS)
             b_force.y = STEERING_RADIUS - b.p.y;
         else if (canvas.height - b.p.y < STEERING_RADIUS)
-            b_force.y = STEERING_RADIUS - (canvas.height - b.p.y);
-
+            b_force.y = (canvas.height - b.p.y) - STEERING_RADIUS;
 
         // add forces to velocity
         b.v.iadd( c_force.mul(COLLISION).mul(dt) );
