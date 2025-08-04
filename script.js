@@ -3,11 +3,6 @@ class Boid {
         this.p = new Vector(x,y);
         this.v = new Vector();
     }
-
-    add(b) {
-        this.p.iadd(b.p);
-        this.v.iadd(b.v);
-    } 
 }
 
 class Vector {
@@ -117,10 +112,6 @@ function update_boids() {
         let f_force = new Vector();
         let b_force = new Vector();
 
-        // not an actual boid
-        // used to store sum of position and velocity of neighbors
-        let total_values = new Boid(0,0);
-
         let num_neighbors = 0;
         for (let n of boids) {
             if(b == n) continue;
@@ -133,7 +124,6 @@ function update_boids() {
             v_force.iadd(n.v);
             f_force.iadd(n.p);
 
-            total_values.add(n);
             num_neighbors += 1;
         }
 
