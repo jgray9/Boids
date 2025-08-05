@@ -48,8 +48,6 @@ class KDTree {
 
     * searchr(b, node, radius, is_x) {
         if (node == null) return;
-        console.log(`boid ${b.p.x}, ${b.p.y} -- node ${node.boid.p.x}, ${node.boid.p.y} -- children? ${node.left != null} ${node.right != null} `);
-        console.log(`distance ${b.p.distance(node.boid.p)}`)
         let bc = is_x ? b.p.x : b.p.y;
         let nc = is_x ? node.boid.p.x : node.boid.p.y;
         if (b != node.boid && b.p.distance(node.boid.p) < radius)
