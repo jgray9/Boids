@@ -1,13 +1,13 @@
-const boids = [];
+const BOIDS = [];
 const dt = 0.05; // timestep in seconds
 const BSIZE = 2;
 const NEIGHBOR_RADIUS = 20;
 const STEERING_RADIUS = 20;
 
-const COLLISION = 1;
-const VELOCITY = 1;
-const CENTERING = 1;
-const BORDER = 10;
+const COLLISION_FORCE = 1;
+const VELOCITY_FORCE = 1;
+const CENTERING_FORCE = 1;
+const BORDER_FORCE = 10;
 
 const MIN_SPEED = 20;
 
@@ -25,11 +25,11 @@ document.addEventListener("mousedown", function (ev) {
         Math.max(STEERING_RADIUS, Math.min(canvas.width - STEERING_RADIUS, x)),
         Math.max(STEERING_RADIUS, Math.min(canvas.height- STEERING_RADIUS, y))
     );
-    b.v = new Vector(
+    b.vel = new Vector(
         (Math.random() * 40) - 20,
         (Math.random() * 40) - 20
     );
-    boids.push(b);
+    BOIDS.push(b);
 })
 
 function update_boids() {
@@ -38,7 +38,7 @@ function update_boids() {
     ctx.lineWidth = 0.5;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    for (let b of boids) {
+    for (let b of BOIDS) {
         // Collision Avoidance Force   sum of vectors from b's neighbors to b (scaled by distance)
         // Velocity Matching Force     vector from b's velocity to average velocity of neighbors
         // Flock Centering Force       vector from b to average position of neighbors
@@ -48,57 +48,57 @@ function update_boids() {
         let b_force = new Vector();
 
         let num_neighbors = 0;
-        for (let n of boids) {
-            if(b == n) continue;
-            let distance = b.p.distance(n.p);
+        for (let nbr of BOIDS) {
+            if(b == nbr) continue;
+            let distance = b.pos.distance(nbr.pos);
             if(distance > NEIGHBOR_RADIUS) continue;
 
-            v_nb = b.p.sub(n.p);
+            v_nb = b.pos.sub(nbr.pos);
             v_nb.length = NEIGHBOR_RADIUS - distance; // length of vector increases as boid gets closer
             c_force.iadd(v_nb);
-            v_force.iadd(n.v);
-            f_force.iadd(n.p);
+            v_force.iadd(nbr.vel);
+            f_force.iadd(nbr.pos);
 
             num_neighbors += 1;
 
             ctx.beginPath();
-            ctx.moveTo(b.p.x, b.p.y);
-            ctx.lineTo(nbr.p.x, nbr.p.y);
+            ctx.moveTo(b.pos.x, b.pos.y);
+            ctx.lineTo(nbr.pos.x, nbr.pos.y);
             ctx.stroke();
         }
 
         // v_force = μ(n.velocity) - b.velocity = Σ(n.velocity) / |N| - b.velocity
         // f_force = μ(n.position) - b.position = Σ(n.position) / |N| - b.position
         if (num_neighbors > 0) {
-            v_force = v_force.div(num_neighbors).sub(b.v);
-            f_force = f_force.div(num_neighbors).sub(b.p);
+            v_force = v_force.div(num_neighbors).sub(b.vel);
+            f_force = f_force.div(num_neighbors).sub(b.pos);
         }
 
         // if distance(border, b.position.x) < STEERING RADIUS:
         //     b_force = STEERING_RADIUS - distance
-        if (b.p.x < STEERING_RADIUS)
-            b_force.x = STEERING_RADIUS - b.p.x;
-        else if (canvas.width - b.p.x < STEERING_RADIUS)
-            b_force.x = (canvas.width - b.p.x) - STEERING_RADIUS;
-        if(b.p.y < STEERING_RADIUS)
-            b_force.y = STEERING_RADIUS - b.p.y;
-        else if (canvas.height - b.p.y < STEERING_RADIUS)
-            b_force.y = (canvas.height - b.p.y) - STEERING_RADIUS;
+        if (b.pos.x < STEERING_RADIUS)
+            b_force.x = STEERING_RADIUS - b.pos.x;
+        else if (canvas.width - b.pos.x < STEERING_RADIUS)
+            b_force.x = (canvas.width - b.pos.x) - STEERING_RADIUS;
+        if(b.pos.y < STEERING_RADIUS)
+            b_force.y = STEERING_RADIUS - b.pos.y;
+        else if (canvas.height - b.pos.y < STEERING_RADIUS)
+            b_force.y = (canvas.height - b.pos.y) - STEERING_RADIUS;
 
         // add forces to velocity
-        b.v.iadd( c_force.mul(COLLISION).mul(dt) );
-        b.v.iadd( v_force.mul(VELOCITY).mul(dt) );
-        b.v.iadd( f_force.mul(CENTERING).mul(dt) );
-        b.v.iadd( b_force.mul(BORDER).mul(dt) );
+        b.vel.iadd( c_force.mul(COLLISION_FORCE).mul(dt) );
+        b.vel.iadd( v_force.mul(VELOCITY_FORCE).mul(dt) );
+        b.vel.iadd( f_force.mul(CENTERING_FORCE).mul(dt) );
+        b.vel.iadd( b_force.mul(BORDER_FORCE).mul(dt) );
     }
 
-    for (let b of boids) {
+    for (let b of BOIDS) {
         // prevent boids moving too slow
-        if(b.v.length < MIN_SPEED && b.v.length > 0)
-            b.v = b.v.div(b.v.length).mul(MIN_SPEED);
+        if(b.vel.length < MIN_SPEED && b.vel.length > 0)
+            b.vel = b.vel.div(b.vel.length).mul(MIN_SPEED);
         // update position
-        b.p.iadd(b.v.mul(dt));
+        b.pos.iadd(b.vel.mul(dt));
 
-        ctx.fillRect(b.p.x - BSIZE/2, b.p.y - BSIZE/2, BSIZE, BSIZE);
+        ctx.fillRect(b.pos.x - BSIZE/2, b.pos.y - BSIZE/2, BSIZE, BSIZE);
     }
 }

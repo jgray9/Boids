@@ -1,7 +1,7 @@
 class Boid {
     constructor(x,y) {
-        this.p = new Vector(x,y);
-        this.v = new Vector();
+        this.pos = new Vector(x,y);
+        this.vel = new Vector();
     }
 }
 
@@ -20,8 +20,8 @@ class KDTree {
     }
 
     insertr(b, node, is_x) {
-        let bc = is_x ? b.p.x : b.p.y;
-        let nc = is_x ? node.boid.p.x : node.boid.p.y;
+        let bc = is_x ? b.pos.x : b.pos.y;
+        let nc = is_x ? node.boid.pos.x : node.boid.pos.y;
         let new_node = {
             boid: b,
             left: null,
@@ -51,9 +51,9 @@ class KDTree {
 
     * searchr(b, node, radius, is_x) {
         if (node == null) return;
-        let bc = is_x ? b.p.x : b.p.y;
-        let nc = is_x ? node.boid.p.x : node.boid.p.y;
-        if (b != node.boid && b.p.distance(node.boid.p) < radius)
+        let bc = is_x ? b.pos.x : b.pos.y;
+        let nc = is_x ? node.boid.pos.x : node.boid.pos.y;
+        if (b != node.boid && b.pos.distance(node.boid.pos) < radius)
             yield node;
         if (nc >= bc - radius)
             yield* this.searchr(b, node.left,  radius, !is_x);
