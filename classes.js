@@ -16,10 +16,10 @@ class KDTree {
                 right: null
             };
         } else
-            this.insertr(b, this.root, true);
+            this.insertR(b, this.root, true);
     }
 
-    insertr(b, node, is_x) {
+    insertR(b, node, is_x) {
         let bc = is_x ? b.pos.x : b.pos.y;
         let nc = is_x ? node.boid.pos.x : node.boid.pos.y;
         let new_node = {
@@ -32,33 +32,33 @@ class KDTree {
             if (node.left == null)
                 node.left = new_node;
             else
-                this.insertr(b, node.left, !is_x);
+                this.insertR(b, node.left, !is_x);
         } else {
             if (node.right == null)
                 node.right = new_node;
             else
-                this.insertr(b, node.right, !is_x);
+                this.insertR(b, node.right, !is_x);
         }
     }
 
-    search(b, radius) {
+    findNeighbors(b, radius) {
         let neighbors = [];
-        let rec = this.searchr(b, this.root, radius, true);
+        let rec = this.findNeighborsR(b, this.root, radius, true);
         for (let iter = rec.next(); !iter.done; iter = rec.next())
             neighbors.push(iter.value.boid);
         return neighbors;
     }
 
-    * searchr(b, node, radius, is_x) {
+    * findNeighborsR(b, node, radius, is_x) {
         if (node == null) return;
         let bc = is_x ? b.pos.x : b.pos.y;
         let nc = is_x ? node.boid.pos.x : node.boid.pos.y;
         if (b != node.boid && b.pos.distance(node.boid.pos) < radius)
             yield node;
         if (nc >= bc - radius)
-            yield* this.searchr(b, node.left,  radius, !is_x);
+            yield* this.findNeighborsR(b, node.left,  radius, !is_x);
         if (nc <= bc + radius)
-            yield* this.searchr(b, node.right, radius, !is_x);
+            yield* this.findNeighborsR(b, node.right, radius, !is_x);
     }
 }
 
