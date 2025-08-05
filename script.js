@@ -35,6 +35,7 @@ document.addEventListener("mousedown", function (ev) {
 function update_boids() {
     canvas = document.getElementById("boidbox");
     ctx = canvas.getContext("2d");
+    ctx.lineWidth = 0.5;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     for (let b of boids) {
@@ -60,7 +61,6 @@ function update_boids() {
 
             num_neighbors += 1;
 
-            ctx.lineWidth = 0.5;
             ctx.beginPath();
             ctx.moveTo(b.p.x, b.p.y);
             ctx.lineTo(nbr.p.x, nbr.p.y);
