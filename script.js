@@ -1,4 +1,5 @@
 const BOIDS = [];
+const KDTREE = new KDTree();
 const dt = 0.05; // timestep in seconds
 const BSIZE = 2;
 const LSIZE = 0.5;
@@ -18,8 +19,6 @@ document.addEventListener("DOMContentLoaded", function (ev) {
 });
 
 document.addEventListener("mousedown", function (ev) {
-    canvas = document.getElementById("boidbox");
-
     let x = ev.x/4;
     let y = ev.y/4;
 
@@ -32,7 +31,8 @@ document.addEventListener("mousedown", function (ev) {
         (Math.random() * 40) - 20
     );
     BOIDS.push(b);
-})
+    KDTREE.insert(b);
+});
 
 function update_boids() {
     canvas = document.getElementById("boidbox");
@@ -49,13 +49,9 @@ function update_boids() {
         let b_force = new Vector();
 
         let num_neighbors = 0;
-        for (let nbr of BOIDS) {
-            if(b == nbr) continue;
-            let distance = b.pos.distance(nbr.pos);
-            if(distance > NEIGHBOR_RADIUS) continue;
-
+        for (let nbr of KDTREE.search(b, NEIGHBOR_RADIUS)) {
             v_nb = b.pos.sub(nbr.pos);
-            v_nb.length = NEIGHBOR_RADIUS - distance; // length of vector increases as boid gets closer
+            v_nb.length = NEIGHBOR_RADIUS - b.pos.distance(nbr.pos); // length of vector increases as boid gets closer
             c_force.iadd(v_nb);
             v_force.iadd(nbr.vel);
             f_force.iadd(nbr.pos);
