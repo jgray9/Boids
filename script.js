@@ -49,8 +49,12 @@ function update_boids() {
         let b_force = new Vector();
 
         let num_neighbors = 0;
-        for (let nbr of KDTREE.search(b, NEIGHBOR_RADIUS)) {
-            v_nb = b.pos.sub(nbr.pos);
+        let kdtree = new KDTree();
+        for (let b of boids)
+            kdtree.insert(b);
+
+        for (let nbr of kdtree.findNeighbors(b, NEIGHBOR_RADIUS)) {
+            v_nb = b.p.sub(nbr.pos);
             v_nb.length = NEIGHBOR_RADIUS - b.pos.distance(nbr.pos); // length of vector increases as boid gets closer
             c_force.iadd(v_nb);
             v_force.iadd(nbr.vel);
