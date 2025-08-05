@@ -14,7 +14,7 @@ const BORDER_FORCE = 10;
 const MIN_SPEED = 20;
 
 document.addEventListener("DOMContentLoaded", function (ev) {
-    setInterval(update_boids, dt * 1000);
+    setInterval(updateBoids, dt * 1000);
     document.getElementById("boidbox").getContext("2d").lineWidth = LSIZE;
 });
 
