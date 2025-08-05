@@ -1,6 +1,7 @@
 const BOIDS = [];
 const dt = 0.05; // timestep in seconds
 const BSIZE = 2;
+const LSIZE = 0.5;
 const NEIGHBOR_RADIUS = 20;
 const STEERING_RADIUS = 20;
 
@@ -13,6 +14,7 @@ const MIN_SPEED = 20;
 
 document.addEventListener("DOMContentLoaded", function (ev) {
     setInterval(update_boids, dt * 1000);
+    document.getElementById("boidbox").getContext("2d").lineWidth = LSIZE;
 });
 
 document.addEventListener("mousedown", function (ev) {
@@ -35,7 +37,6 @@ document.addEventListener("mousedown", function (ev) {
 function update_boids() {
     canvas = document.getElementById("boidbox");
     ctx = canvas.getContext("2d");
-    ctx.lineWidth = 0.5;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     for (let b of BOIDS) {
