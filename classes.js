@@ -41,9 +41,12 @@ class KDTree {
         }
     }
 
-    * search(b, radius) {
-        if (this.root == null) return;
-        yield* this.searchr(b, this.root, radius, true);
+    search(b, radius) {
+        let neighbors = [];
+        let rec = this.searchr(b, this.root, radius, true);
+        for (let iter = rec.next(); !iter.done; iter = rec.next())
+            neighbors.push(iter.value.boid);
+        return neighbors;
     }
 
     * searchr(b, node, radius, is_x) {
