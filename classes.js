@@ -5,6 +5,26 @@ class Boid {
     }
 }
 
+class KDTree {
+    root = null;
+
+    insert(b) {
+
+    }
+
+    insertr(b, node, is_x) {
+
+    }
+
+    search(b) {
+
+    }
+
+    searchr(b, node, is_x) {
+
+    }
+}
+
 class Vector {
     constructor(x=0,y=x) {
         this.x = x;
