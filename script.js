@@ -59,6 +59,12 @@ function update_boids() {
             f_force.iadd(n.p);
 
             num_neighbors += 1;
+
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(b.p.x, b.p.y);
+            ctx.lineTo(nbr.p.x, nbr.p.y);
+            ctx.stroke();
         }
 
         // v_force = μ(n.velocity) - b.velocity = Σ(n.velocity) / |N| - b.velocity
