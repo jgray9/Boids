@@ -1,5 +1,4 @@
 const BOIDS = [];
-const KDTREE = new KDTree();
 const dt = 0.05; // timestep in seconds
 const BSIZE = 2;
 const LSIZE = 0.5;
@@ -31,13 +30,15 @@ document.addEventListener("mousedown", function (ev) {
         (Math.random() * 40) - 20
     );
     BOIDS.push(b);
-    KDTREE.insert(b);
 });
 
 function updateBoids() {
     canvas = document.getElementById("boidbox");
     ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let kdtree = new KDTree();
+    for (let b of BOIDS)
+        kdtree.insert(b);
 
     for (let b of BOIDS) {
         // Collision Avoidance Force   sum of vectors from b's neighbors to b (scaled by distance)
@@ -49,9 +50,6 @@ function updateBoids() {
         let b_force = new Vector();
 
         let num_neighbors = 0;
-        let kdtree = new KDTree();
-        for (let b of BOIDS)
-            kdtree.insert(b);
 
         for (let nbr of kdtree.findNeighbors(b, NEIGHBOR_RADIUS)) {
             v_nb = b.pos.sub(nbr.pos);
