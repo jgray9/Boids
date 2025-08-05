@@ -41,12 +41,23 @@ class KDTree {
         }
     }
 
-    search(b) {
-
+    * search(b, radius) {
+        if (this.root == null) return;
+        yield* this.searchr(b, this.root, radius, true);
     }
 
-    searchr(b, node, is_x) {
-
+    * searchr(b, node, radius, is_x) {
+        if (node == null) return;
+        console.log(`boid ${b.p.x}, ${b.p.y} -- node ${node.boid.p.x}, ${node.boid.p.y} -- children? ${node.left != null} ${node.right != null} `);
+        console.log(`distance ${b.p.distance(node.boid.p)}`)
+        let bc = is_x ? b.p.x : b.p.y;
+        let nc = is_x ? node.boid.p.x : node.boid.p.y;
+        if (b != node.boid && b.p.distance(node.boid.p) < radius)
+            yield node;
+        if (nc >= bc - radius)
+            yield* this.searchr(b, node.left,  radius, !is_x);
+        if (nc <= bc + radius)
+            yield* this.searchr(b, node.right, radius, !is_x);
     }
 }
 
