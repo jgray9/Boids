@@ -48,10 +48,12 @@ function updateBoids() {
 
             num_neighbors += 1;
 
-            ctx.beginPath();
-            ctx.moveTo(b.pos.x, b.pos.y);
-            ctx.lineTo(nbr.pos.x, nbr.pos.y);
-            ctx.stroke();
+            if(LVISIBLE) {
+                ctx.beginPath();
+                ctx.moveTo(b.pos.x, b.pos.y);
+                ctx.lineTo(nbr.pos.x, nbr.pos.y);
+                ctx.stroke();
+            }
         }
 
         // v_force = μ(n.velocity) - b.velocity = Σ(n.velocity) / |N| - b.velocity

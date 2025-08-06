@@ -9,4 +9,6 @@ const VELOCITY_FORCE = 1;       // modifier for velocity matching force
 const CENTERING_FORCE = 1;      // modifier for flock centering force
 const BORDER_FORCE = 10;        // modifier for border avoidance force
 
+LVISIBLE = false;
+
 const MIN_SPEED = 20;   // minimum speed for any boid
