@@ -1,16 +1,4 @@
 const BOIDS = [];
-const dt = 0.05; // timestep in seconds
-const BSIZE = 2;
-const LSIZE = 0.5;
-const NEIGHBOR_RADIUS = 20;
-const STEERING_RADIUS = 20;
-
-const COLLISION_FORCE = 1;
-const VELOCITY_FORCE = 1;
-const CENTERING_FORCE = 1;
-const BORDER_FORCE = 10;
-
-const MIN_SPEED = 20;
 
 document.addEventListener("DOMContentLoaded", function (ev) {
     setInterval(updateBoids, dt * 1000);
