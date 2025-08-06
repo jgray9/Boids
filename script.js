@@ -5,20 +5,17 @@ document.addEventListener("DOMContentLoaded", function (ev) {
     document.getElementById("boidbox").getContext("2d").lineWidth = LSIZE;
 });
 
-document.addEventListener("mousedown", function (ev) {
-    let x = ev.x/4;
-    let y = ev.y/4;
+function addBoid(ev) {
+    let x = ev.offsetX/4;
+    let y = ev.offsetY/4;
 
-    let b = new Boid(
-        Math.max(STEERING_RADIUS, Math.min(canvas.width - STEERING_RADIUS, x)),
-        Math.max(STEERING_RADIUS, Math.min(canvas.height- STEERING_RADIUS, y))
-    );
+    let b = new Boid(x, y);
     b.vel = new Vector(
         (Math.random() * 40) - 20,
         (Math.random() * 40) - 20
     );
     BOIDS.push(b);
-});
+}
 
 function updateBoids() {
     canvas = document.getElementById("boidbox");
