@@ -55,7 +55,7 @@ function updateBoids() {
 
         for (let nbr of kdtree.findNeighbors(b, NEIGHBOR_RADIUS)) {
             v_nb = b.pos.sub(nbr.pos);
-            v_nb.length = NEIGHBOR_RADIUS - Boid.Distance(b, nbr); // length of vector increases as boid gets closer
+            v_nb.setLength( NEIGHBOR_RADIUS - Boid.Distance(b, nbr) ); // length of vector increases as boid gets closer
             c_force.iadd(v_nb);
             v_force.iadd(nbr.vel);
             f_force.iadd(nbr.pos);
@@ -95,7 +95,7 @@ function updateBoids() {
         b.vel.iadd( b_force.mul(BORDER_FORCE).mul(dt) );
 
         // prevent boids moving too slow
-        if(b.vel.length < MIN_SPEED && b.vel.length > 0)
-            b.vel = b.vel.div(b.vel.length).mul(MIN_SPEED);
+        if(b.vel.length2 < MIN_SPEED**2 && b.vel.length2 > 0)
+            b.vel.setLength(MIN_SPEED);
     }
 }
