@@ -45,24 +45,24 @@ class KDTree {
         }
     }
 
-    findNeighbors(b, radius) {
+    findNeighbors(b) {
         let neighbors = [];
-        let rec = this.findNeighborsR(b, this.root, radius, true);
+        let rec = this.findNeighborsR(b, this.root, true);
         for (let iter = rec.next(); !iter.done; iter = rec.next())
             neighbors.push(iter.value.boid);
         return neighbors;
     }
 
-    * findNeighborsR(b, node, radius, is_x) {
+    * findNeighborsR(b, node, is_x) {
         if (node == null) return;
         let bc = is_x ? b.pos.x : b.pos.y;
         let nc = is_x ? node.boid.pos.x : node.boid.pos.y;
-        if (b != node.boid && Boid.Distance(b, node.boid) < radius)
+        if (b != node.boid && Boid.Distance(b, node.boid) < NEIGHBOR_RADIUS)
             yield node;
-        if (nc >= bc - radius)
-            yield* this.findNeighborsR(b, node.left,  radius, !is_x);
-        if (nc <= bc + radius)
-            yield* this.findNeighborsR(b, node.right, radius, !is_x);
+        if (nc >= bc - NEIGHBOR_RADIUS)
+            yield* this.findNeighborsR(b, node.left,  !is_x);
+        if (nc <= bc + NEIGHBOR_RADIUS)
+            yield* this.findNeighborsR(b, node.right, !is_x);
     }
 }
 

@@ -54,7 +54,7 @@ function updateBoids() {
 
         let num_neighbors = 0;
 
-        for (let nbr of kdtree.findNeighbors(b, NEIGHBOR_RADIUS)) {
+        for (let nbr of kdtree.findNeighbors(b)) {
             v_nb = b.pos.sub(nbr.pos);
             v_nb.setLength( NEIGHBOR_RADIUS - Boid.Distance(b, nbr) ); // length of vector increases as boid gets closer
             c_force.iadd(v_nb);
