@@ -18,13 +18,24 @@ function addBoid(ev) {
 }
 
 function updateBoids() {
-    canvas = document.getElementById("boidbox");
-    ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let canvas = document.getElementById("boidbox");
+    let ctx = canvas.getContext("2d");
     let kdtree = new KDTree();
-    for (let b of BOIDS)
-        kdtree.insert(b);
 
+    //
+    // UPDATE POSITION & DRAW BOIDS
+    //
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let b of BOIDS) {
+        b.pos.iadd(b.vel.mul(dt));
+
+        kdtree.insert(b);
+        ctx.fillRect(b.pos.x - BSIZE/2, b.pos.y - BSIZE/2, BSIZE, BSIZE);
+    }
+
+    //
+    // UPDATE VELOCITY & DRAW NEIGHBOR LINES
+    //
     for (let b of BOIDS) {
         // Collision Avoidance Force   sum of vectors from b's neighbors to b (scaled by distance)
         // Velocity Matching Force     vector from b's velocity to average velocity of neighbors
@@ -76,15 +87,9 @@ function updateBoids() {
         b.vel.iadd( v_force.mul(VELOCITY_FORCE).mul(dt) );
         b.vel.iadd( f_force.mul(CENTERING_FORCE).mul(dt) );
         b.vel.iadd( b_force.mul(BORDER_FORCE).mul(dt) );
-    }
 
-    for (let b of BOIDS) {
         // prevent boids moving too slow
         if(b.vel.length < MIN_SPEED && b.vel.length > 0)
             b.vel = b.vel.div(b.vel.length).mul(MIN_SPEED);
-        // update position
-        b.pos.iadd(b.vel.mul(dt));
-
-        ctx.fillRect(b.pos.x - BSIZE/2, b.pos.y - BSIZE/2, BSIZE, BSIZE);
     }
 }
