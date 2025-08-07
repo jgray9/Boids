@@ -31,6 +31,12 @@ function updateBoids() {
 
         kdtree.insert(b);
         ctx.fillRect(b.pos.x - BSIZE/2, b.pos.y - BSIZE/2, BSIZE, BSIZE);
+        if(LVISIBLE) {
+            ctx.beginPath();
+            ctx.arc(b.pos.x, b.pos.y, NEIGHBOR_RADIUS, 0, 2 * Math.PI);
+            ctx.stroke();
+        }
+
     }
 
     //
