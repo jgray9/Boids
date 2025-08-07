@@ -3,6 +3,10 @@ class Boid {
         this.pos = new Vector(x,y);
         this.vel = new Vector();
     }
+
+    static Distance(b,b2) {
+        return b.pos.sub(b2.pos).length;
+    }
 }
 
 class KDTree {
@@ -53,7 +57,7 @@ class KDTree {
         if (node == null) return;
         let bc = is_x ? b.pos.x : b.pos.y;
         let nc = is_x ? node.boid.pos.x : node.boid.pos.y;
-        if (b != node.boid && b.pos.distance(node.boid.pos) < radius)
+        if (b != node.boid && Boid.Distance(b, node.boid) < radius)
             yield node;
         if (nc >= bc - radius)
             yield* this.findNeighborsR(b, node.left,  radius, !is_x);
@@ -75,10 +79,6 @@ class Vector {
     set length(i) {
         this.idiv(this.length);
         this.imul(i);
-    }
-
-    distance(otherVec) {
-        return this.sub(otherVec).length;
     }
 
     add(otherVec) {
