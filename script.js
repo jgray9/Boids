@@ -3,6 +3,7 @@ const BOIDS = [];
 document.addEventListener("DOMContentLoaded", function (ev) {
     setInterval(updateBoids, dt * 1000);
     document.getElementById("boidbox").getContext("2d").lineWidth = LSIZE;
+    document.getElementById("neighborbox").checked = false;
 });
 
 function addBoid(ev) {
