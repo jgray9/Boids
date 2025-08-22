@@ -47,13 +47,13 @@ function updateBoids() {
         // Collision Avoidance Force   sum of vectors from b's neighbors to b (scaled by distance)
         // Velocity Matching Force     vector from b's velocity to average velocity of neighbors
         // Flock Centering Force       vector from b to average position of neighbors
+        // Border Avoidance Force      vectors from border edges to b
         let c_force = new Vector();
         let v_force = new Vector();
         let f_force = new Vector();
         let b_force = new Vector();
 
         let num_neighbors = 0;
-
         for (let nbr of kdtree.findNeighbors(b)) {
             v_nb = b.pos.sub(nbr.pos);
             v_nb.setLength( NEIGHBOR_RADIUS - Boid.Distance(b, nbr) ); // length of vector increases as boid gets closer
@@ -78,12 +78,14 @@ function updateBoids() {
             f_force = f_force.div(num_neighbors).sub(b.pos);
         }
 
-        // if distance(border, b.position.x) < STEERING RADIUS:
-        //     b_force = STEERING_RADIUS - distance
+        // if distance(border.x, b.position.x) < STEERING RADIUS:
+        //     b_force.x = STEERING_RADIUS - distance
         if (b.pos.x < STEERING_RADIUS)
             b_force.x = STEERING_RADIUS - b.pos.x;
         else if (canvas.width - b.pos.x < STEERING_RADIUS)
             b_force.x = (canvas.width - b.pos.x) - STEERING_RADIUS;
+        // if distance(border.y, b.position.y) < STEERING RADIUS:
+        //     b_force.y = STEERING_RADIUS - distance
         if(b.pos.y < STEERING_RADIUS)
             b_force.y = STEERING_RADIUS - b.pos.y;
         else if (canvas.height - b.pos.y < STEERING_RADIUS)
