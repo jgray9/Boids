@@ -7,8 +7,8 @@ document.addEventListener("DOMContentLoaded", function (ev) {
 });
 
 function addBoid(ev) {
-    let x = ev.offsetX/4;
-    let y = ev.offsetY/4;
+    let x = ev.offsetX;
+    let y = ev.offsetY;
 
     let b = new Boid(x, y);
     b.vel = new Vector(
