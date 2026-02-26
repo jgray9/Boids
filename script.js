@@ -70,13 +70,6 @@ function updateBoids() {
         ctx.lineTo(b.pos.x + b.vel.y/v*BSIZE, b.pos.y - b.vel.x/v*BSIZE);
         ctx.closePath();
         ctx.fill();
-
-        if(LVISIBLE) {
-            ctx.beginPath();
-            ctx.arc(b.pos.x, b.pos.y, NEIGHBOR_RADIUS, 0, 2 * Math.PI);
-            ctx.stroke();
-        }
-
     }
 
     //
@@ -97,7 +90,7 @@ function updateBoids() {
             let dist = Boid.Distance(b, nbr);
             if (dist < COLLISION_RADIUS) {
                 v_nb = b.pos.sub(nbr.pos);
-                v_nb.setLength( COLLISION_RADIUS - Boid.Distance(b, nbr) ); // length of vector increases as boid gets closer
+                v_nb.setLength( COLLISION_RADIUS - dist ); // length of vector increases as boid gets closer
                 c_force.iadd(v_nb);
             }
             v_force.iadd(nbr.vel);
@@ -108,6 +101,7 @@ function updateBoids() {
             if(LVISIBLE) {
                 ctx.beginPath();
                 ctx.moveTo(b.pos.x, b.pos.y);
+                ctx.strokeStyle = dist < COLLISION_RADIUS ? 'red' : 'gray';
                 ctx.lineTo(nbr.pos.x, nbr.pos.y);
                 ctx.stroke();
             }
