@@ -110,8 +110,8 @@ function updateBoids() {
         // v_force = μ(n.velocity) - b.velocity = Σ(n.velocity) / |N| - b.velocity
         // f_force = μ(n.position) - b.position = Σ(n.position) / |N| - b.position
         if (num_neighbors > 0) {
-            v_force = v_force.div(num_neighbors).sub(b.vel);
-            f_force = f_force.div(num_neighbors).sub(b.pos);
+            v_force.idiv(num_neighbors).isub(b.vel);
+            f_force.idiv(num_neighbors).isub(b.pos);
         }
 
         // if distance(border.axis, b.position.axis) < STEERING RADIUS:
