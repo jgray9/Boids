@@ -71,9 +71,12 @@ function updateBoids() {
 
         let num_neighbors = 0;
         for (let nbr of kdtree.findNeighbors(b)) {
-            v_nb = b.pos.sub(nbr.pos);
-            v_nb.setLength( NEIGHBOR_RADIUS - Boid.Distance(b, nbr) ); // length of vector increases as boid gets closer
-            c_force.iadd(v_nb);
+            let dist = Boid.Distance(b, nbr);
+            if (dist < COLLISION_RADIUS) {
+                v_nb = b.pos.sub(nbr.pos);
+                v_nb.setLength( COLLISION_RADIUS - Boid.Distance(b, nbr) ); // length of vector increases as boid gets closer
+                c_force.iadd(v_nb);
+            }
             v_force.iadd(nbr.vel);
             f_force.iadd(nbr.pos);
 
