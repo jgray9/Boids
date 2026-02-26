@@ -1,9 +1,12 @@
 const BOIDS = [];
 
-document.addEventListener("DOMContentLoaded", function (ev) {
+document.addEventListener('DOMContentLoaded', () => {
+    let canvas = document.getElementById('boidbox');
+    let ctx = canvas.getContext('2d');
+    ctx.lineWidth = LSIZE;
+
     setInterval(updateBoids, 1000 / FPS);
-    document.getElementById("boidbox").getContext("2d").lineWidth = LSIZE;
-    document.getElementById("neighborbox").checked = false;
+    document.getElementById('neighborbox').checked = false;
 });
 
 function addBoid(ev) {
@@ -19,8 +22,8 @@ function addBoid(ev) {
 }
 
 function updateBoids() {
-    let canvas = document.getElementById("boidbox");
-    let ctx = canvas.getContext("2d");
+    let canvas = document.getElementById('boidbox');
+    let ctx = canvas.getContext('2d');
     let kdtree = new KDTree();
 
     //

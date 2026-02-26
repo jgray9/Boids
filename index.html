@@ -1,22 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <meta charset="UTF-8" />
     <title>Boids</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <div>
-        <p>Show Neighbors</p>
-        <input id="neighborbox" type="checkbox" onclick="LVISIBLE = !LVISIBLE">
+      <p>Show Neighbors</p>
+      <input id="neighborbox" type="checkbox" onclick="LVISIBLE = !LVISIBLE" />
     </div>
     <div>
-        <canvas id="boidbox" width=1200 height=600 onclick="addBoid(event)"></canvas>
+      <canvas
+        id="boidbox"
+        width="1200"
+        height="600"
+        onclick="addBoid(event)"
+      ></canvas>
     </div>
     <p id="debug"></p>
-    
+
     <script src="parameters.js"></script>
     <script src="classes.js"></script>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
