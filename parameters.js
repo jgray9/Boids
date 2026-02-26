@@ -1,4 +1,4 @@
-const dt = 0.05;    // timestep in seconds
+const FPS = 30;                 // updates per second
 const BSIZE = 5;                // size of boids
 const LSIZE = 0.5;              // size of neighbor lines
 const NEIGHBOR_RADIUS = 40;     // distance 
@@ -11,4 +11,5 @@ const BORDER_FORCE = 10;        // modifier for border avoidance force
 
 LVISIBLE = false;
 
-const MIN_SPEED = 40;   // minimum speed for any boid
+const MAX_SPEED = 10;           // maximum speed for any boid
+const MIN_SPEED = 2;            // minimum speed for any boid

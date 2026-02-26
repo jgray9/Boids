@@ -1,7 +1,7 @@
 const BOIDS = [];
 
 document.addEventListener("DOMContentLoaded", function (ev) {
-    setInterval(updateBoids, dt * 1000);
+    setInterval(updateBoids, 1000 / FPS);
     document.getElementById("boidbox").getContext("2d").lineWidth = LSIZE;
     document.getElementById("neighborbox").checked = false;
 });
@@ -29,7 +29,7 @@ function updateBoids() {
     //
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let b of BOIDS) {
-        b.pos.iadd(b.vel.mul(dt));
+        b.pos.iadd(b.vel);
         kdtree.insert(b);
 
         // draw a triangle pointing in the direction of the boid velocity
@@ -108,13 +108,15 @@ function updateBoids() {
             b_force.y = (canvas.height - b.pos.y) - STEERING_RADIUS;
 
         // add forces to velocity
-        b.vel.iadd( c_force.mul(COLLISION_FORCE).mul(dt) );
-        b.vel.iadd( v_force.mul(VELOCITY_FORCE).mul(dt) );
-        b.vel.iadd( f_force.mul(CENTERING_FORCE).mul(dt) );
-        b.vel.iadd( b_force.mul(BORDER_FORCE).mul(dt) );
+        b.vel.iadd( c_force.mul(COLLISION_FORCE) );
+        b.vel.iadd( v_force.mul(VELOCITY_FORCE) );
+        b.vel.iadd( f_force.mul(CENTERING_FORCE) );
+        b.vel.iadd( b_force.mul(BORDER_FORCE) );
 
-        // prevent boids moving too slow
-        if(b.vel.length2 < MIN_SPEED**2 && b.vel.length2 > 0)
+        // clamp boid speed between minimum and maximum
+        if(b.vel.length2 <= MIN_SPEED**2 && b.vel.length2 > 0)
             b.vel.setLength(MIN_SPEED);
+        if(b.vel.length2 > MAX_SPEED**2)
+            b.vel.setLength(MAX_SPEED);
     }
 }
