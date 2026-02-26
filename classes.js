@@ -83,6 +83,7 @@ class Vector {
     setLength(i) {
         this.idiv(this.getLength());
         this.imul(i);
+        return this;
     }
 
     add(otherVec) {
@@ -116,15 +117,18 @@ class Vector {
     iadd(otherVec) {
         this.x += otherVec.x ?? otherVec;
         this.y += otherVec.y ?? otherVec;
+        return this;
     }
 
     imul(otherVec) {
         this.x *= otherVec.x ?? otherVec;
         this.y *= otherVec.y ?? otherVec;
+        return this;
     }
 
     idiv(otherVec) {
         this.x /= otherVec.x ?? otherVec;
         this.y /= otherVec.y ?? otherVec;
+        return this;
     }
 }
