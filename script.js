@@ -36,15 +36,15 @@ function updateBoids() {
         let v = Math.sqrt(b.vel.length2); // length of velocity vector
         ctx.beginPath();
         // starting point = boid position offset by boid velocity
-        ctx.moveTo(b.pos.x + b.vel.x, b.pos.y + b.vel.y);
+        ctx.moveTo(b.pos.x + b.vel.x*BSIZE, b.pos.y + b.vel.y*BSIZE);
         // rotate velocity vector by 90deg and normalize, then offset by position
         // [0 -1][ b.vel.x ] = [ -b.vel.y ]
         // [1  0][ b.vel.y ] = [  b.vel.x ]
-        ctx.lineTo(b.pos.x - b.vel.y/v, b.pos.y + b.vel.x/v);
+        ctx.lineTo(b.pos.x - b.vel.y/v*BSIZE, b.pos.y + b.vel.x/v*BSIZE);
         // rotate velocity vector by 270deg and normalize, then offset by position
         // [ 0  1][ b.vel.x ] = [  b.vel.y ]
         // [-1  0][ b.vel.y ] = [ -b.vel.x ]
-        ctx.lineTo(b.pos.x + b.vel.y/v, b.pos.y - b.vel.x/v);
+        ctx.lineTo(b.pos.x + b.vel.y/v*BSIZE, b.pos.y - b.vel.x/v*BSIZE);
         ctx.closePath();
         ctx.fill();
 
