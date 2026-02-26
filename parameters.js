@@ -1,8 +1,7 @@
 const FPS = 30;                 // updates per second
 const BSIZE = 5;                // size of boids
 const LSIZE = 0.5;              // size of neighbor lines
-const NEIGHBOR_RADIUS = 40;     // distance 
-const STEERING_RADIUS = 40;     
+const NEIGHBOR_RADIUS = 40;     // distance
 
 const COLLISION_FORCE = 1;      // modifier for collision avoidance force
 const VELOCITY_FORCE = 1;       // modifier for velocity matching force

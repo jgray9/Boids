@@ -96,16 +96,16 @@ function updateBoids() {
 
         // if distance(border.x, b.position.x) < STEERING RADIUS:
         //     b_force.x = STEERING_RADIUS - distance
-        if (b.pos.x < STEERING_RADIUS)
-            b_force.x = STEERING_RADIUS - b.pos.x;
-        else if (canvas.width - b.pos.x < STEERING_RADIUS)
-            b_force.x = (canvas.width - b.pos.x) - STEERING_RADIUS;
+        if (b.pos.x < NEIGHBOR_RADIUS)
+            b_force.x = NEIGHBOR_RADIUS - b.pos.x;
+        else if (canvas.width - b.pos.x < NEIGHBOR_RADIUS)
+            b_force.x = (canvas.width - b.pos.x) - NEIGHBOR_RADIUS;
         // if distance(border.y, b.position.y) < STEERING RADIUS:
         //     b_force.y = STEERING_RADIUS - distance
-        if(b.pos.y < STEERING_RADIUS)
-            b_force.y = STEERING_RADIUS - b.pos.y;
-        else if (canvas.height - b.pos.y < STEERING_RADIUS)
-            b_force.y = (canvas.height - b.pos.y) - STEERING_RADIUS;
+        if(b.pos.y < NEIGHBOR_RADIUS)
+            b_force.y = NEIGHBOR_RADIUS - b.pos.y;
+        else if (canvas.height - b.pos.y < NEIGHBOR_RADIUS)
+            b_force.y = (canvas.height - b.pos.y) - NEIGHBOR_RADIUS;
 
         // add forces to velocity
         b.vel.iadd( c_force.mul(COLLISION_FORCE) );
