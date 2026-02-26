@@ -54,22 +54,6 @@ function updateBoids() {
     for (let b of BOIDS) {
         b.pos.iadd(b.vel);
         kdtree.insert(b);
-
-        // draw a triangle pointing in the direction of the boid velocity
-        let v = b.vel.getLength(); // length of velocity vector
-        ctx.beginPath();
-        // starting point = boid position offset by boid velocity
-        ctx.moveTo(b.pos.x + b.vel.x*BSIZE, b.pos.y + b.vel.y*BSIZE);
-        // rotate velocity vector by 90deg and normalize, then offset by position
-        // [0 -1][ b.vel.x ] = [ -b.vel.y ]
-        // [1  0][ b.vel.y ] = [  b.vel.x ]
-        ctx.lineTo(b.pos.x - b.vel.y/v*BSIZE, b.pos.y + b.vel.x/v*BSIZE);
-        // rotate velocity vector by 270deg and normalize, then offset by position
-        // [ 0  1][ b.vel.x ] = [  b.vel.y ]
-        // [-1  0][ b.vel.y ] = [ -b.vel.x ]
-        ctx.lineTo(b.pos.x + b.vel.y/v*BSIZE, b.pos.y - b.vel.x/v*BSIZE);
-        ctx.closePath();
-        ctx.fill();
     }
 
     //
@@ -136,5 +120,26 @@ function updateBoids() {
             b.vel.setLength(MIN_SPEED);
         if(b.vel.getLengthSquared() > MAX_SPEED**2)
             b.vel.setLength(MAX_SPEED);
+    }
+
+    //
+    // DRAW BOIDS
+    //
+    for(let b of BOIDS) {
+        // draw a triangle pointing in the direction of the boid velocity
+        let v = b.vel.getLength(); // length of velocity vector
+        ctx.beginPath();
+        // starting point = boid position offset by boid velocity
+        ctx.moveTo(b.pos.x + b.vel.x*BSIZE, b.pos.y + b.vel.y*BSIZE);
+        // rotate velocity vector by 90deg and normalize, then offset by position
+        // [0 -1][ b.vel.x ] = [ -b.vel.y ]
+        // [1  0][ b.vel.y ] = [  b.vel.x ]
+        ctx.lineTo(b.pos.x - b.vel.y/v*BSIZE, b.pos.y + b.vel.x/v*BSIZE);
+        // rotate velocity vector by 270deg and normalize, then offset by position
+        // [ 0  1][ b.vel.x ] = [  b.vel.y ]
+        // [-1  0][ b.vel.y ] = [ -b.vel.x ]
+        ctx.lineTo(b.pos.x + b.vel.y/v*BSIZE, b.pos.y - b.vel.x/v*BSIZE);
+        ctx.closePath();
+        ctx.fill();
     }
 }
