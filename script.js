@@ -12,10 +12,9 @@ function addBoid(ev) {
 
     let b = new Boid(x, y);
     b.vel = new Vector(
-        (Math.random() * 40) - 20,
-        (Math.random() * 40) - 20
+        Math.random() - 0.5,
+        Math.random() - 0.5
     );
-    b.vel.setLength(MIN_SPEED);
     BOIDS.push(b);
 }
 
