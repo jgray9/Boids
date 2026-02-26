@@ -15,6 +15,7 @@ function addBoid(ev) {
         (Math.random() * 40) - 20,
         (Math.random() * 40) - 20
     );
+    b.vel.setLength(MIN_SPEED);
     BOIDS.push(b);
 }
 
