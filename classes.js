@@ -5,7 +5,7 @@ class Boid {
     }
 
     static Distance(b,b2) {
-        return Math.sqrt( b.pos.sub(b2.pos).length2 );
+        return b.pos.sub(b2.pos).getLength();
     }
 }
 
@@ -72,12 +72,16 @@ class Vector {
         this.y = y;
     }
 
-    get length2() {
+    getLengthSquared() {
         return this.x ** 2 + this.y ** 2;
     }
 
+    getLength() {
+        return Math.sqrt(this.getLengthSquared());
+    }
+
     setLength(i) {
-        this.idiv(Math.sqrt(this.length2));
+        this.idiv(this.getLength());
         this.imul(i);
     }
 

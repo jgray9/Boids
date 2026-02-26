@@ -33,7 +33,7 @@ function updateBoids() {
         kdtree.insert(b);
 
         // draw a triangle pointing in the direction of the boid velocity
-        let v = Math.sqrt(b.vel.length2); // length of velocity vector
+        let v = b.vel.getLength(); // length of velocity vector
         ctx.beginPath();
         // starting point = boid position offset by boid velocity
         ctx.moveTo(b.pos.x + b.vel.x*BSIZE, b.pos.y + b.vel.y*BSIZE);
@@ -115,9 +115,9 @@ function updateBoids() {
         b.vel.iadd( b_force.mul(BORDER_FORCE) );
 
         // clamp boid speed between minimum and maximum
-        if(b.vel.length2 <= MIN_SPEED**2 && b.vel.length2 > 0)
+        if(b.vel.getLengthSquared() <= MIN_SPEED**2 && b.vel.getLengthSquared() > 0)
             b.vel.setLength(MIN_SPEED);
-        if(b.vel.length2 > MAX_SPEED**2)
+        if(b.vel.getLengthSquared() > MAX_SPEED**2)
             b.vel.setLength(MAX_SPEED);
     }
 }
