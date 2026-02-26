@@ -120,6 +120,12 @@ class Vector {
         return this;
     }
 
+    isub(otherVec) {
+        this.x -= otherVec.x ?? otherVec;
+        this.y -= otherVec.y ?? otherVec;
+        return this;
+    }
+
     imul(otherVec) {
         this.x *= otherVec.x ?? otherVec;
         this.y *= otherVec.y ?? otherVec;
