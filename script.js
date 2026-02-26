@@ -29,9 +29,24 @@ function updateBoids() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let b of BOIDS) {
         b.pos.iadd(b.vel.mul(dt));
-
         kdtree.insert(b);
-        ctx.fillRect(b.pos.x - BSIZE/2, b.pos.y - BSIZE/2, BSIZE, BSIZE);
+
+        // draw a triangle pointing in the direction of the boid velocity
+        let v = Math.sqrt(b.vel.length2); // length of velocity vector
+        ctx.beginPath();
+        // starting point = boid position offset by boid velocity
+        ctx.moveTo(b.pos.x + b.vel.x, b.pos.y + b.vel.y);
+        // rotate velocity vector by 90deg and normalize, then offset by position
+        // [0 -1][ b.vel.x ] = [ -b.vel.y ]
+        // [1  0][ b.vel.y ] = [  b.vel.x ]
+        ctx.lineTo(b.pos.x - b.vel.y/v, b.pos.y + b.vel.x/v);
+        // rotate velocity vector by 270deg and normalize, then offset by position
+        // [ 0  1][ b.vel.x ] = [  b.vel.y ]
+        // [-1  0][ b.vel.y ] = [ -b.vel.x ]
+        ctx.lineTo(b.pos.x + b.vel.y/v, b.pos.y - b.vel.x/v);
+        ctx.closePath();
+        ctx.fill();
+
         if(LVISIBLE) {
             ctx.beginPath();
             ctx.arc(b.pos.x, b.pos.y, NEIGHBOR_RADIUS, 0, 2 * Math.PI);
