@@ -97,14 +97,12 @@ function updateBoids() {
             f_force = f_force.div(num_neighbors).sub(b.pos);
         }
 
-        // if distance(border.x, b.position.x) < STEERING RADIUS:
-        //     b_force.x = STEERING_RADIUS - distance
+        // if distance(border.axis, b.position.axis) < STEERING RADIUS:
+        //     b_force.axis = STEERING_RADIUS - distance
         if (b.pos.x < NEIGHBOR_RADIUS)
             b_force.x = NEIGHBOR_RADIUS - b.pos.x;
         else if (canvas.width - b.pos.x < NEIGHBOR_RADIUS)
             b_force.x = (canvas.width - b.pos.x) - NEIGHBOR_RADIUS;
-        // if distance(border.y, b.position.y) < STEERING RADIUS:
-        //     b_force.y = STEERING_RADIUS - distance
         if(b.pos.y < NEIGHBOR_RADIUS)
             b_force.y = NEIGHBOR_RADIUS - b.pos.y;
         else if (canvas.height - b.pos.y < NEIGHBOR_RADIUS)
