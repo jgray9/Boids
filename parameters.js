@@ -1,4 +1,5 @@
 const FPS = 30;                 // updates per second
+const BPS = 10;                 // number of boids spawned per second when mouse is down
 const BSIZE = 5;                // size of boids
 const LSIZE = 0.5;              // size of neighbor lines
 const COLLISION_RADIUS = 20;    // max distance between boids for collision avoidance

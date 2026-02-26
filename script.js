@@ -5,14 +5,26 @@ document.addEventListener('DOMContentLoaded', () => {
     let ctx = canvas.getContext('2d');
     ctx.lineWidth = LSIZE;
 
+    canvas.addEventListener('mousemove', event => {
+        canvas.spawnX = event.offsetX;
+        canvas.spawnY = event.offsetY;
+    });
+    canvas.addEventListener('mousedown', () => {
+        addBoid(canvas.spawnX, canvas.spawnY);
+        canvas.spawnIntervalID = setInterval(
+            () => addBoid(canvas.spawnX, canvas.spawnY),
+            1000 / BPS
+        );
+    });
+    canvas.addEventListener('mouseup', () => {
+        clearInterval(canvas.spawnIntervalID);
+    });
+
     setInterval(updateBoids, 1000 / FPS);
     document.getElementById('neighborbox').checked = false;
 });
 
-function addBoid(ev) {
-    let x = ev.offsetX;
-    let y = ev.offsetY;
-
+function addBoid(x, y) {
     let b = new Boid(x, y);
     b.vel = new Vector(
         Math.random() - 0.5,
