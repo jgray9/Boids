@@ -3,21 +3,30 @@ const BOIDS = [];
 document.addEventListener('DOMContentLoaded', () => {
     let canvas = document.getElementById('boidbox');
     let ctx = canvas.getContext('2d');
+    canvas.containsMouse = false;
     ctx.lineWidth = LSIZE;
 
     canvas.addEventListener('mousemove', event => {
         canvas.spawnX = event.offsetX;
         canvas.spawnY = event.offsetY;
     });
-    canvas.addEventListener('mousedown', () => {
-        addBoid(canvas.spawnX, canvas.spawnY);
-        canvas.spawnIntervalID = setInterval(
-            () => addBoid(canvas.spawnX, canvas.spawnY),
-            1000 / BPS
-        );
+    document.addEventListener('mousedown', () => {
+        if(canvas.containsMouse)
+            addBoid(canvas.spawnX, canvas.spawnY);
+
+        canvas.spawnIntervalID = setInterval(() => {
+            if(canvas.containsMouse)
+                addBoid(canvas.spawnX, canvas.spawnY)
+        }, 1000 / BPS);
     });
-    canvas.addEventListener('mouseup', () => {
+    document.addEventListener('mouseup', () => {
         clearInterval(canvas.spawnIntervalID);
+    });
+    canvas.addEventListener('mouseenter', () => {
+        canvas.containsMouse = true;
+    });
+    canvas.addEventListener('mouseleave', () => {
+        canvas.containsMouse = false;
     });
 
     setInterval(updateBoids, 1000 / FPS);
