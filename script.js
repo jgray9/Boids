@@ -48,7 +48,7 @@ function updateBoids() {
     let kdtree = new KDTree();
 
     //
-    // UPDATE POSITION & DRAW BOIDS
+    // UPDATE POSITION
     //
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let b of BOIDS) {
