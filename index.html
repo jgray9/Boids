@@ -1,22 +1,16 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Boids</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>boids</title>
   </head>
   <body>
-    <div>
-      <p>Show Neighbors</p>
-      <input id="neighborbox" type="checkbox" onclick="LVISIBLE = !LVISIBLE" />
-    </div>
-    <div>
-      <canvas id="boidbox" width="1200" height="600"></canvas>
-    </div>
-    <p id="debug"></p>
-
-    <script src="parameters.js"></script>
-    <script src="classes.js"></script>
-    <script src="script.js"></script>
+    <div id="root"></div>
+    <script src="/src/parameters.js"></script>
+    <script src="/src/classes.js"></script>
+    <script src="/src/script.js"></script>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
