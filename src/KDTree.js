@@ -20,7 +20,7 @@ export default class KDTree {
 
     insertR(b, node, is_x) {
         let bc = is_x ? b.p.x : b.p.y;
-        let nc = is_x ? node.boid.p.x : node.bo.pos.y;
+        let nc = is_x ? node.boid.p.x : node.bo.p.y;
         let new_node = {
             boid: b,
             left: null,
