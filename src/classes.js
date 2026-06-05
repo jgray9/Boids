@@ -1,4 +1,4 @@
-class Boid {
+export class Boid {
     constructor(x,y) {
         this.pos = new Vector(x,y);
         this.vel = new Vector();
@@ -9,64 +9,64 @@ class Boid {
     }
 }
 
-class KDTree {
-    root = null;
+// class KDTree {
+//     root = null;
 
-    insert(b) {
-        if (this.root == null) {
-            this.root = {
-                boid: b,
-                left: null,
-                right: null
-            };
-        } else
-            this.insertR(b, this.root, true);
-    }
+//     insert(b) {
+//         if (this.root == null) {
+//             this.root = {
+//                 boid: b,
+//                 left: null,
+//                 right: null
+//             };
+//         } else
+//             this.insertR(b, this.root, true);
+//     }
 
-    insertR(b, node, is_x) {
-        let bc = is_x ? b.pos.x : b.pos.y;
-        let nc = is_x ? node.boid.pos.x : node.boid.pos.y;
-        let new_node = {
-            boid: b,
-            left: null,
-            right: null
-        };
+//     insertR(b, node, is_x) {
+//         let bc = is_x ? b.pos.x : b.pos.y;
+//         let nc = is_x ? node.boid.pos.x : node.boid.pos.y;
+//         let new_node = {
+//             boid: b,
+//             left: null,
+//             right: null
+//         };
 
-        if (bc < nc) {
-            if (node.left == null)
-                node.left = new_node;
-            else
-                this.insertR(b, node.left, !is_x);
-        } else {
-            if (node.right == null)
-                node.right = new_node;
-            else
-                this.insertR(b, node.right, !is_x);
-        }
-    }
+//         if (bc < nc) {
+//             if (node.left == null)
+//                 node.left = new_node;
+//             else
+//                 this.insertR(b, node.left, !is_x);
+//         } else {
+//             if (node.right == null)
+//                 node.right = new_node;
+//             else
+//                 this.insertR(b, node.right, !is_x);
+//         }
+//     }
 
-    findNeighbors(b) {
-        let neighbors = [];
-        let rec = this.findNeighborsR(b, this.root, true);
-        for (let iter = rec.next(); !iter.done; iter = rec.next())
-            neighbors.push(iter.value.boid);
-        return neighbors;
-    }
+//     findNeighbors(b) {
+//         let neighbors = [];
+//         let rec = this.findNeighborsR(b, this.root, true);
+//         for (let iter = rec.next(); !iter.done; iter = rec.next())
+//             neighbors.push(iter.value.boid);
+//         return neighbors;
+//     }
 
-    * findNeighborsR(b, node, is_x) {
-        if (node == null) return;
-        let bc = is_x ? b.pos.x : b.pos.y;
-        let nc = is_x ? node.boid.pos.x : node.boid.pos.y;
-        if (b != node.boid && Boid.Distance(b, node.boid) < NEIGHBOR_RADIUS)
-            yield node;
-        if (nc >= bc - NEIGHBOR_RADIUS)
-            yield* this.findNeighborsR(b, node.left,  !is_x);
-        if (nc <= bc + NEIGHBOR_RADIUS)
-            yield* this.findNeighborsR(b, node.right, !is_x);
-    }
-}
+//     * findNeighborsR(b, node, is_x) {
+//         if (node == null) return;
+//         let bc = is_x ? b.pos.x : b.pos.y;
+//         let nc = is_x ? node.boid.pos.x : node.boid.pos.y;
+//         if (b != node.boid && Boid.Distance(b, node.boid) < NEIGHBOR_RADIUS)
+//             yield node;
+//         if (nc >= bc - NEIGHBOR_RADIUS)
+//             yield* this.findNeighborsR(b, node.left,  !is_x);
+//         if (nc <= bc + NEIGHBOR_RADIUS)
+//             yield* this.findNeighborsR(b, node.right, !is_x);
+//     }
+// }
 
-class Vector {
+export class Vector {
     constructor(x=0,y=x) {
         this.x = x;
         this.y = y;
