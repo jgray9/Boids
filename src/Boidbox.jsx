@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import './Boidbox.css'
 
-function Boixbox() {
+function Boidbox() {
   let canvasRef = useRef(null);
 
   useEffect(() => {
