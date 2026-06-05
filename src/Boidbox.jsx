@@ -22,6 +22,10 @@ function Boidbox() {
   const MIN_SPEED = 2;            // minimum speed for any boid
 
   let boids = useRef([]);
+  let mouseX = useRef(0);
+  let mouseY = useRef(0);
+  let mouseInCanvas = useRef(false);
+  let spawnTimerID = useRef();
 
   function addBoid(x, y) {
     let b = {
@@ -136,13 +140,43 @@ function Boidbox() {
     ctx.stroke();
   }
 
+  const onMouseMove = e => {
+    mouseX.current = e.clientX;
+    mouseY.current = e.clientY;
+  }
+
+  const onMouseDown = () => {
+    if (mouseInCanvas.current)
+      addBoid(mouseX.current, mouseY.current);
+
+    spawnTimerID.current = setInterval(() => {
+      if (mouseInCanvas.current)
+        addBoid(mouseX.current, mouseY.current)
+    }, 1000 / BPS);
+  }
+
+  const onMouseUp = () => clearInterval(spawnTimerID.current);
+
   let canvasRef = useRef(null);
   useEffect(() => {
     let canvas = canvasRef.current;
     let ctx = canvas.getContext('2d');
+    mouseInCanvas.current = false;
+    ctx.lineWidth = LSIZE;
+
+    canvas.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mousedown', onMouseDown);
+    document.addEventListener('mouseup', onMouseUp);
 
     let timerID = setInterval(() => updateBoids(canvas, ctx), 1000 / FPS);
-    return () => clearTimeout(timerID);
+    // document.getElementById('neighborbox').checked = false;
+
+    return () => {
+      canvas.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mousedown', onMouseDown);
+      document.removeEventListener('mouseup', onMouseUp);
+      clearTimeout(timerID);
+    };
   }, []);
 
   return <canvas
@@ -150,7 +184,8 @@ function Boidbox() {
     ref={canvasRef}
     width={1200}
     height={600}
-    onMouseDown={e => addBoid(e.clientX, e.clientY)}
+    onMouseEnter={() => mouseInCanvas.current = true}
+    onMouseLeave={() => mouseInCanvas.current = false}
   />
 }
 
