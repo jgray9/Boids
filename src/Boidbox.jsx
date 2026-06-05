@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Boid, KDTree, Vector } from './classes'
+import Vector from './Vector';
 import './Boidbox.css'
 
 function Boidbox() {
@@ -23,11 +23,10 @@ function Boidbox() {
   let boids = useRef([]);
 
   function addBoid(x, y) {
-    let b = new Boid(x, y);
-    b.vel = new Vector(
-      Math.random() - 0.5,
-      Math.random() - 0.5
-    );
+    let b = {
+      'p': new Vector(x, y),
+      'v': new Vector(Math.random() - 0.5, Math.random() - 0.5)
+    };
     boids.current.push(b);
   }
 
@@ -37,11 +36,8 @@ function Boidbox() {
     //
     // UPDATE POSITION
     //
-    let kdtree = new KDTree();
-    for (let b of boids.current) {
-      b.pos.iadd(b.vel);
-      kdtree.insert(b);
-    }
+    for (let b of boids.current)
+      b.p = b.p.add(b.v);
 
     //
     // UPDATE VELOCITY & DRAW NEIGHBOR LINES
@@ -57,56 +53,63 @@ function Boidbox() {
       let b_force = new Vector();
 
       let num_neighbors = 0;
-      for (let nbr of kdtree.findNeighbors(b, NEIGHBOR_RADIUS)) {
-        let dist = Boid.Distance(b, nbr);
-        if (dist < COLLISION_RADIUS) {
-          v_nb = b.pos.sub(nbr.pos);
-          v_nb.setLength(COLLISION_RADIUS - dist); // length of vector increases as boid gets closer
-          c_force.iadd(v_nb);
-        }
-        v_force.iadd(nbr.vel);
-        f_force.iadd(nbr.pos);
+      for (let nbr of boids.current) {
+        let dist = Vector.Distance(b.p, nbr.p);
 
+        // skip if neighbor is too far away
+        if (nbr === b || dist >= NEIGHBOR_RADIUS)
+          continue;
+
+        // add vector from nbr -> b if nbr is close enough
+        if (dist < COLLISION_RADIUS) {
+          let v_nb = b.p.sub(nbr.p);
+          v_nb = v_nb.withLength(COLLISION_RADIUS - dist); // length of vector increases as boid gets closer
+          c_force = c_force.add(v_nb);
+        }
+
+        v_force = v_force.add(nbr.v);
+        f_force = f_force.add(nbr.p);
         num_neighbors += 1;
 
-        if (LVISIBLE) {
-          ctx.beginPath();
-          ctx.moveTo(b.pos.x, b.pos.y);
-          ctx.strokeStyle = dist < COLLISION_RADIUS ? 'red' : 'gray';
-          ctx.lineTo(nbr.pos.x, nbr.pos.y);
-          ctx.stroke();
-        }
+        // TODO reimplement
+        // if (LVISIBLE) {
+        //   ctx.beginPath();
+        //   ctx.moveTo(b.pos.x, b.pos.y);
+        //   ctx.strokeStyle = dist < COLLISION_RADIUS ? 'red' : 'gray';
+        //   ctx.lineTo(nbr.pos.x, nbr.pos.y);
+        //   ctx.stroke();
+        // }
       }
 
       // v_force = μ(n.velocity) - b.velocity = Σ(n.velocity) / |N| - b.velocity
       // f_force = μ(n.position) - b.position = Σ(n.position) / |N| - b.position
       if (num_neighbors > 0) {
-        v_force.idiv(num_neighbors).isub(b.vel);
-        f_force.idiv(num_neighbors).isub(b.pos);
+        v_force = v_force.div(num_neighbors).sub(b.v);
+        f_force = f_force.div(num_neighbors).sub(b.p);
       }
 
       // if distance(border.axis, b.position.axis) < STEERING RADIUS:
       //     b_force.axis = STEERING_RADIUS - distance
-      if (b.pos.x < NEIGHBOR_RADIUS)
-        b_force.x = NEIGHBOR_RADIUS - b.pos.x;
-      else if (canvas.width - b.pos.x < NEIGHBOR_RADIUS)
-        b_force.x = (canvas.width - b.pos.x) - NEIGHBOR_RADIUS;
-      if (b.pos.y < NEIGHBOR_RADIUS)
-        b_force.y = NEIGHBOR_RADIUS - b.pos.y;
-      else if (canvas.height - b.pos.y < NEIGHBOR_RADIUS)
-        b_force.y = (canvas.height - b.pos.y) - NEIGHBOR_RADIUS;
+      if (b.p.x < NEIGHBOR_RADIUS)
+        b_force.x = NEIGHBOR_RADIUS - b.p.x;
+      else if (canvas.width - b.p.x < NEIGHBOR_RADIUS)
+        b_force.x = (canvas.width - b.p.x) - NEIGHBOR_RADIUS;
+      if (b.p.y < NEIGHBOR_RADIUS)
+        b_force.y = NEIGHBOR_RADIUS - b.p.y;
+      else if (canvas.height - b.p.y < NEIGHBOR_RADIUS)
+        b_force.y = (canvas.height - b.p.y) - NEIGHBOR_RADIUS;
 
       // add forces to velocity
-      b.vel.iadd(c_force.mul(COLLISION_FORCE));
-      b.vel.iadd(v_force.mul(VELOCITY_FORCE));
-      b.vel.iadd(f_force.mul(CENTERING_FORCE));
-      b.vel.iadd(b_force.mul(BORDER_FORCE));
+      b.v = b.v.add(c_force.mul(COLLISION_FORCE));
+      b.v = b.v.add(v_force.mul(VELOCITY_FORCE));
+      b.v = b.v.add(f_force.mul(CENTERING_FORCE));
+      b.v = b.v.add(b_force.mul(BORDER_FORCE));
 
       // clamp boid speed between minimum and maximum
-      if (b.vel.getLengthSquared() <= MIN_SPEED ** 2 && b.vel.getLengthSquared() > 0)
-        b.vel.setLength(MIN_SPEED);
-      if (b.vel.getLengthSquared() > MAX_SPEED ** 2)
-        b.vel.setLength(MAX_SPEED);
+      if (b.v.getLengthSquared() <= MIN_SPEED ** 2 && b.v.getLengthSquared() > 0)
+        b.v = b.v.withLength(MIN_SPEED);
+      if (b.v.getLengthSquared() > MAX_SPEED ** 2)
+        b.v = b.v.withLength(MAX_SPEED);
     }
 
     //
@@ -114,18 +117,18 @@ function Boidbox() {
     //
     for (let b of boids.current) {
       // draw a triangle pointing in the direction of the boid velocity
-      let v = b.vel.getLength(); // length of velocity vector
+      let v = b.v.getLength(); // length of velocity vector
       ctx.beginPath();
       // starting point = boid position offset by boid velocity
-      ctx.moveTo(b.pos.x + b.vel.x * BSIZE, b.pos.y + b.vel.y * BSIZE);
+      ctx.moveTo(b.p.x + b.v.x * BSIZE, b.p.y + b.v.y * BSIZE);
       // rotate velocity vector by 90deg and normalize, then offset by position
       // [0 -1][ b.vel.x ] = [ -b.vel.y ]
       // [1  0][ b.vel.y ] = [  b.vel.x ]
-      ctx.lineTo(b.pos.x - b.vel.y / v * BSIZE, b.pos.y + b.vel.x / v * BSIZE);
+      ctx.lineTo(b.p.x - b.v.y / v * BSIZE, b.p.y + b.v.x / v * BSIZE);
       // rotate velocity vector by 270deg and normalize, then offset by position
       // [ 0  1][ b.vel.x ] = [  b.vel.y ]
       // [-1  0][ b.vel.y ] = [ -b.vel.x ]
-      ctx.lineTo(b.pos.x + b.vel.y / v * BSIZE, b.pos.y - b.vel.x / v * BSIZE);
+      ctx.lineTo(b.p.x + b.v.y / v * BSIZE, b.p.y - b.v.x / v * BSIZE);
       ctx.closePath();
       ctx.fill();
     }
