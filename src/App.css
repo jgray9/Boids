@@ -1,0 +1,14 @@
+.controls {
+  margin: 5px;
+  padding: 10px 10px;
+
+  align-items: center;
+  display: grid;
+
+  grid-template-columns: auto 1fr;
+
+  width: 20%;
+
+  background-color: lightgray;
+  border-radius: 10em;
+}

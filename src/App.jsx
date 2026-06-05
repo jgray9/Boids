@@ -11,9 +11,11 @@ function App() {
 
   return (
     <>
-      <section className='controls'>
-        <p className='control'>Show Neighbors</p>
-        <input className='control neighborbox' type='checkbox' onChange={e => showGuides.current = e.target.checked} />
+      <section>
+        <div className='controls'>
+          <p className='control'>Show Neighbors</p>
+          <input className='control neighborbox' type='checkbox' onChange={e => showGuides.current = e.target.checked} />
+        </div>
       </section>
       <section>
         <Boidbox showGuides={showGuides} />
