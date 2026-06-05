@@ -141,7 +141,7 @@ function Boidbox() {
     let canvas = canvasRef.current;
     let ctx = canvas.getContext('2d');
 
-    let timerID = setInterval(() => updateBoids(canvas, ctx), 1000 / 60);
+    let timerID = setInterval(() => updateBoids(canvas, ctx), 1000 / FPS);
     return () => clearTimeout(timerID);
   }, []);
 
