@@ -166,7 +166,6 @@ function Boidbox({ showGuides }) {
     document.addEventListener('mouseup', onMouseUp);
 
     let timerID = setInterval(() => updateBoids(canvas, ctx), 1000 / FPS);
-    document.getElementById('neighborbox').checked = false;
 
     return () => {
       canvas.removeEventListener('mousemove', onMouseMove);
