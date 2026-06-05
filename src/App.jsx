@@ -1,3 +1,4 @@
+import Boidbox from './Boidbox'
 import './App.css'
 
 function App() {
@@ -8,7 +9,7 @@ function App() {
         <input id="neighborbox" type="checkbox" onclick="LVISIBLE = !LVISIBLE" />
       </div>
       <div>
-        <canvas id="boidbox" width="1200" height="600"></canvas>
+        <Boidbox />
       </div>
       <p id="debug"></p>
     </>
