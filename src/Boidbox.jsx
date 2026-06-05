@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
-import Vector from './Vector';
+import Vector from './Vector'
+import KDTree from './KDTree'
 import './Boidbox.css'
 
 function Boidbox() {
@@ -32,12 +33,15 @@ function Boidbox() {
 
   function updateBoids(canvas, ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let kdtree = new KDTree(NEIGHBOR_RADIUS);
 
     //
     // UPDATE POSITION
     //
-    for (let b of boids.current)
+    for (let b of boids.current) {
       b.p = b.p.add(b.v);
+      kdtree.insert(b);
+    }
 
     //
     // UPDATE VELOCITY & DRAW NEIGHBOR LINES
@@ -53,12 +57,8 @@ function Boidbox() {
       let b_force = new Vector();
 
       let num_neighbors = 0;
-      for (let nbr of boids.current) {
+      for (let nbr of kdtree.findNeighbors(b)) {
         let dist = Vector.Distance(b.p, nbr.p);
-
-        // skip if neighbor is too far away
-        if (nbr === b || dist >= NEIGHBOR_RADIUS)
-          continue;
 
         // add vector from nbr -> b if nbr is close enough
         if (dist < COLLISION_RADIUS) {
