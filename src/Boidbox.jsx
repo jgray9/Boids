@@ -19,7 +19,7 @@ function Boidbox() {
 
     // boid logic
     boids.current.forEach(b => {
-      ctx.rect(b.x - 10, b.y - 10, 20, 20);
+      ctx.rect(b.pos.x - 10, b.pos.y - 10, 20, 20);
     });
     ctx.stroke();
   }
@@ -33,7 +33,14 @@ function Boidbox() {
     return () => clearTimeout(timerID);
   }, []);
 
-  return <canvas id='boidbox' ref={canvasRef} width={1200} height={600} />
+
+  return <canvas
+    id='boidbox'
+    ref={canvasRef}
+    width={1200}
+    height={600}
+    onMouseDown={e => addBoid(e.clientX, e.clientY)}
+  />
 }
 
 export default Boidbox
