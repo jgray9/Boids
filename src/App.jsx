@@ -6,7 +6,7 @@ function App() {
   let showGuides = useRef(false); // when true, draw lines between boids within neighbor radius
 
   useEffect(() => {
-    document.querySelector('neighborbox').checked = false;
+    document.querySelector('.neighborbox').checked = false;
   }, []);
 
   return (
