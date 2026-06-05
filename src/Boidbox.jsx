@@ -1,17 +1,18 @@
 import { useEffect, useRef } from 'react'
+import { Boid, Vector } from './classes'
 import './Boidbox.css'
 
 function Boidbox() {
-  let boids = useRef([
-    {
-      'x': 10,
-      'y': 10
-    },
-    {
-      'x': 20,
-      'y': 20
-    }
-  ]);
+  let boids = useRef([]);
+
+  function addBoid(x, y) {
+    let b = new Boid(x, y);
+    b.vel = new Vector(
+      Math.random() - 0.5,
+      Math.random() - 0.5
+    );
+    boids.current.push(b);
+  }
 
   function updateBoids(canvas, ctx) {
     // ctx.clearRect(0, 0, canvas.width, canvas.height);
