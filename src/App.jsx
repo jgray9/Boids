@@ -4,10 +4,10 @@ import './App.css'
 function App() {
   return (
     <>
-      <div>
+      {/* <div>
         <p>Show Neighbors</p>
         <input id="neighborbox" type="checkbox" onclick="LVISIBLE = !LVISIBLE" />
-      </div>
+      </div> */}
       <div>
         <Boidbox />
       </div>
