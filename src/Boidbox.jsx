@@ -138,8 +138,8 @@ function Boidbox({ showGuides }) {
   }
 
   const onMouseMove = e => {
-    mouseX.current = e.clientX;
-    mouseY.current = e.clientY;
+    mouseX.current = e.clientX - canvasRef.current.offsetLeft;
+    mouseY.current = e.clientY - canvasRef.current.offsetTop;
   }
 
   const onMouseDown = () => {
