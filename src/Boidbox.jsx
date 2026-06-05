@@ -3,7 +3,7 @@ import Vector from './Vector'
 import KDTree from './KDTree'
 import './Boidbox.css'
 
-function Boidbox() {
+function Boidbox({ showGuides }) {
   const FPS = 30;                 // updates per second
   const BPS = 10;                 // number of boids spawned per second when mouse is down
   const BSIZE = 5;                // size of boids
@@ -15,8 +15,6 @@ function Boidbox() {
   const VELOCITY_FORCE = 0.05;    // modifier for velocity matching force
   const CENTERING_FORCE = 0.001;  // modifier for flock centering force
   const BORDER_FORCE = 0.02;      // modifier for border avoidance force
-
-  let LVISIBLE = false;               // when true, draw lines between boids within neighbor radius
 
   const MAX_SPEED = 10;           // maximum speed for any boid
   const MIN_SPEED = 2;            // minimum speed for any boid
@@ -75,14 +73,13 @@ function Boidbox() {
         f_force = f_force.add(nbr.p);
         num_neighbors += 1;
 
-        // TODO reimplement
-        // if (LVISIBLE) {
-        //   ctx.beginPath();
-        //   ctx.moveTo(b.pos.x, b.pos.y);
-        //   ctx.strokeStyle = dist < COLLISION_RADIUS ? 'red' : 'gray';
-        //   ctx.lineTo(nbr.pos.x, nbr.pos.y);
-        //   ctx.stroke();
-        // }
+        if (showGuides.current) {
+          ctx.beginPath();
+          ctx.moveTo(b.p.x, b.p.y);
+          ctx.strokeStyle = dist < COLLISION_RADIUS ? 'red' : 'gray';
+          ctx.lineTo(nbr.p.x, nbr.p.y);
+          ctx.stroke();
+        }
       }
 
       // v_force = μ(n.velocity) - b.velocity = Σ(n.velocity) / |N| - b.velocity
@@ -169,7 +166,7 @@ function Boidbox() {
     document.addEventListener('mouseup', onMouseUp);
 
     let timerID = setInterval(() => updateBoids(canvas, ctx), 1000 / FPS);
-    // document.getElementById('neighborbox').checked = false;
+    document.getElementById('neighborbox').checked = false;
 
     return () => {
       canvas.removeEventListener('mousemove', onMouseMove);
