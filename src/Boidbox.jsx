@@ -60,12 +60,12 @@ function Boidbox({ showGuides }) {
 
       let num_neighbors = 0;
       for (let nbr of kdtree.findNeighbors(b)) {
-        let dist = Vector.Distance(b.p, nbr.p);
+        let distSq = Vector.DistanceSquared(b.p, nbr.p);
 
         // add vector from nbr -> b if nbr is close enough
-        if (dist < COLLISION_RADIUS) {
+        if (distSq < COLLISION_RADIUS**2) {
           let v_nb = b.p.sub(nbr.p);
-          v_nb = v_nb.withLength(COLLISION_RADIUS - dist); // length of vector increases as boid gets closer
+          v_nb = v_nb.withLength(COLLISION_RADIUS - Math.sqrt(distSq)); // length of vector increases as boid gets closer
           c_force = c_force.add(v_nb);
         }
 
