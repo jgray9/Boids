@@ -171,7 +171,7 @@ function Boidbox({ showGuides }) {
       canvas.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mousedown', onMouseDown);
       document.removeEventListener('mouseup', onMouseUp);
-      clearTimeout(timerID);
+      clearInterval(timerID);
     };
   }, []);
 
