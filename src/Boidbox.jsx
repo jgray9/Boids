@@ -76,7 +76,7 @@ function Boidbox({ showGuides }) {
         if (showGuides.current) {
           ctx.beginPath();
           ctx.moveTo(b.p.x, b.p.y);
-          ctx.strokeStyle = dist < COLLISION_RADIUS ? 'red' : 'gray';
+          ctx.strokeStyle = distSq < COLLISION_RADIUS**2 ? 'red' : 'gray';
           ctx.lineTo(nbr.p.x, nbr.p.y);
           ctx.stroke();
         }
