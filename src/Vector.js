@@ -4,6 +4,10 @@ export default class Vector {
         this.y = y;
     }
 
+    static DistanceSquared(v, w) {
+        return v.sub(w).getLengthSquared();
+    }
+
     static Distance(v, w) {
         return v.sub(w).getLength();
     }
